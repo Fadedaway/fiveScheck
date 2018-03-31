@@ -6,3 +6,22 @@ logging:
 #端口号
 server:
     port: 8090
+
+#数据库配置
+spring:
+  datasource:
+    type: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
+    url: jdbc:mysql://localhost:3306/fiveScheck?characterEncoding=utf8&useSSL=true
+    username: root
+    password: 123
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    database: mysql
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        strategy: org.hibernate.cfg.ImprovedNamingStrategy
+
+
