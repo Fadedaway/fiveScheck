@@ -1,7 +1,10 @@
 package com.magic.jovi.entities;
 
+import com.magic.jovi.listeners.CRUDListener;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.envers.Audited;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +15,8 @@ import java.util.Date;
  */
 @Data
 @MappedSuperclass
+@Audited
+@EntityListeners({AuditingEntityListener.class, CRUDListener.class})
 public abstract class BaseEntity implements Serializable {
 
     private static final long serialVersionUID = -5040425880097759738L;

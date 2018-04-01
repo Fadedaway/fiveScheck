@@ -12,4 +12,16 @@ public interface WorkGroupService {
      * @param workGroupVO 前台传入参数
      */
     void add(WorkGroupVO workGroupVO);
+
+    /**
+     * 编辑工作组
+     * @param workGroupVO 前台传入参数
+     */
+    void edit(WorkGroupVO workGroupVO);
+
+    /**
+     * 删除工作组，支持批量删除
+     * @param ids 需要删除的工作组主键id，以逗号分隔
+     */
+    void delete(String ids);
 }

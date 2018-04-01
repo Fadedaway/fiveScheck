@@ -5,8 +5,7 @@ import com.magic.jovi.services.WorkGroupService;
 import com.magic.jovi.utils.ReqResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by fanjiawei on 2018/3/31
@@ -30,9 +29,13 @@ public class WorkGroupController {
      */
     @RequestMapping(value = "/add")
     @ResponseBody
-    public ReqResult<?> add(WorkGroupVO workGroupVO) {
-        workGroupService.add(workGroupVO);
-        return ReqResult.success("新增成功");
+    public ReqResult<?> add(@RequestBody WorkGroupVO workGroupVO) {
+        try {
+            workGroupService.add(workGroupVO);
+            return ReqResult.success("新增成功");
+        }catch (Exception e) {
+            return ReqResult.failure(e.getMessage());
+        }
     }
 
     /**
@@ -40,7 +43,31 @@ public class WorkGroupController {
      * @param workGroupVO 前台传入数据
      * @return ReqResult
      */
-    public ReqResult edit(WorkGroupVO workGroupVO) {
-        return null;
+    @RequestMapping(value = "/edit")
+    @ResponseBody
+    public ReqResult<?> edit(@RequestBody WorkGroupVO workGroupVO) {
+        try {
+            workGroupService.edit(workGroupVO);
+            return ReqResult.success("编辑成功");
+        }catch (Exception e) {
+            return ReqResult.failure(e.getMessage());
+        }
+    }
+
+    /**
+     * 删除工作组，支持批量删除
+     * @param ids 需要删除的工作组id 批量删除时以逗号分隔
+     * @return ReqResult
+     */
+    @RequestMapping(value = "/delete/{ids}")
+    @ResponseBody
+    public ReqResult<?> delete(@PathVariable String ids) {
+        try {
+            workGroupService.delete(ids);
+            return ReqResult.success("删除成功");
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ReqResult.failure(e.getMessage());
+        }
     }
 }
