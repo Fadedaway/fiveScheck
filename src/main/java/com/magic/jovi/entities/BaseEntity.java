@@ -1,7 +1,6 @@
 package com.magic.jovi.entities;
 
 import com.magic.jovi.listeners.CRUDListener;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -20,9 +19,8 @@ public abstract class BaseEntity implements Serializable {
     private static final long serialVersionUID = -5040425880097759738L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column
     private int isDeleted;
@@ -43,11 +41,11 @@ public abstract class BaseEntity implements Serializable {
     @Column
     private Date modifyTime;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

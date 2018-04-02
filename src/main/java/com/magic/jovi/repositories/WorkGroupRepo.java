@@ -1,10 +1,11 @@
 package com.magic.jovi.repositories;
 
 import com.magic.jovi.entities.WorkGroup;
-import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.io.Serializable;
 
 /**
  * Created by fanjiawei on 2018/3/31
  */
-public interface WorkGroupRepo extends JpaRepository<WorkGroup, String> {
+public interface WorkGroupRepo extends BaseJpaRepository<WorkGroup, Serializable> {
 }
