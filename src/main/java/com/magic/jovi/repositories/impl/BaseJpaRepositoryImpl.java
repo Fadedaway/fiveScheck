@@ -30,13 +30,26 @@ public class BaseJpaRepositoryImpl<T extends BaseEntity, ID extends Serializable
     @Override
     public void logicalDelete(ID id) {
         Assert.notNull(id, ID_MUST_NOT_BE_NULL);
-        T entity = findOne(id);
+        T entity = findOneById(id);
         if (entity == null) {
             throw new EmptyResultDataAccessException(String.format("No entity with id %s exists!", id), 1);
         }
         entity.setIsDeleted(DeleteStatus.disable.ordinal());
         save(entity);
 
+    }
+
+    @Override
+    public void logicalDeleteByIdList(List<ID> idList) {
+        Assert.notEmpty(idList, LIST_MUST_NOT_BE_EMPTY);
+        idList.forEach(id -> {
+            T entity = findOneById(id);
+            if (null == entity) {
+                throw new EmptyResultDataAccessException(String.format("No entity with id %s exists!", id), 1);
+            }
+            entity.setIsDeleted(DeleteStatus.disable.ordinal());
+            save(entity);
+        });
     }
 
     @Override

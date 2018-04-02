@@ -14,6 +14,8 @@ public interface BaseJpaRepository<T, ID extends Serializable> extends JpaReposi
 
     void logicalDelete(ID id);
 
+    void logicalDeleteByIdList(List<ID> idList);
+
     void logicalDelete(List<T> entities);
 
     T findOneById(ID id);

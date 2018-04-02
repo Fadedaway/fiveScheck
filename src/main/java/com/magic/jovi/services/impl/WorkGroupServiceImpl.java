@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * Created by fanjiawei on 2018/3/31
  */
@@ -55,6 +58,20 @@ public class WorkGroupServiceImpl implements WorkGroupService {
 
     @Override
     public void delete(String ids) {
-        //TODO 删除逻辑 批量删除
+        if (StringUtils.isBlank(ids)) {
+            throw new RuntimeException("传入数据为空");
+        }
+
+        String[] idArray = ids.split(",");
+        //删除逻辑 批量删除
+        Arrays.stream(idArray).forEach(id -> {
+            if (StringUtils.isNotBlank(id)) {
+                WorkGroup workGroup = workGroupRepo.findOneById(id);
+
+                if (Objects.nonNull(workGroup)) {
+                    workGroupRepo.logicalDelete(id);
+                }
+            }
+        });
     }
 }
