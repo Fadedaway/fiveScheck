@@ -1,8 +1,5 @@
 package com.magic.jovi.entities;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -11,9 +8,7 @@ import javax.persistence.Table;
  * Created by fanjiawei on 2018/3/31
  * 工作组
  */
-@EqualsAndHashCode(callSuper = true)
 @Entity
-@Data
 @Table(name = "work_group")
 public class WorkGroup extends BaseEntity {
 
@@ -24,4 +19,12 @@ public class WorkGroup extends BaseEntity {
      */
     @Column
     private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

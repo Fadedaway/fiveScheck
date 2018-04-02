@@ -1,8 +1,5 @@
 package com.magic.jovi.entities;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -11,9 +8,7 @@ import java.util.Date;
 /**
  * Created by fanjiawei on 2018/3/31
  */
-@EqualsAndHashCode(callSuper = true)
 @Entity
-@Data
 @Table(name = "problem_collect")
 public class ProblemCollect extends BaseEntity{
 
@@ -48,4 +43,44 @@ public class ProblemCollect extends BaseEntity{
      */
     @Column
     private Date checkDate;
+
+    public String getPositionId() {
+        return positionId;
+    }
+
+    public void setPositionId(String positionId) {
+        this.positionId = positionId;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getProblemId() {
+        return problemId;
+    }
+
+    public void setProblemId(String problemId) {
+        this.problemId = problemId;
+    }
+
+    public int getPoint() {
+        return point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
+    }
+
+    public Date getCheckDate() {
+        return checkDate;
+    }
+
+    public void setCheckDate(Date checkDate) {
+        this.checkDate = checkDate;
+    }
 }

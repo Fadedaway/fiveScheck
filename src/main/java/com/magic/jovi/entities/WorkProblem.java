@@ -1,8 +1,5 @@
 package com.magic.jovi.entities;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -10,10 +7,8 @@ import javax.persistence.Table;
 /**
  * Created by fanjiawei on 2018/3/31
  */
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "work_problem")
-@Data
 public class WorkProblem extends BaseEntity {
 
     private static final long serialVersionUID = -2819958311088265152L;
@@ -35,4 +30,28 @@ public class WorkProblem extends BaseEntity {
      */
     @Column
     private int point;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public int getPoint() {
+        return point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
+    }
 }
