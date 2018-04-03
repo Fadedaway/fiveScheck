@@ -2,6 +2,8 @@ package com.magic.jovi.services;
 
 import com.magic.jovi.entities.vo.WorkGroupVO;
 
+import java.util.List;
+
 /**
  * Created by fanjiawei on 2018/3/31
  */
@@ -24,4 +26,10 @@ public interface WorkGroupService {
      * @param ids 需要删除的工作组主键id，以逗号分隔
      */
     void delete(String ids);
+
+    /**
+     * 查处所有未删除的数据
+     * @return List
+     */
+    List findAll();
 }
