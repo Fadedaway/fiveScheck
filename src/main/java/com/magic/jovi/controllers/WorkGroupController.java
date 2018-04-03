@@ -4,7 +4,6 @@ import com.magic.jovi.entities.vo.WorkGroupVO;
 import com.magic.jovi.services.WorkGroupService;
 import com.magic.jovi.utils.ReqResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  * 工作组管理
  */
 @RequestMapping(value = "/workGroup")
-@Controller
+@RestController
 public class WorkGroupController {
 
     private final WorkGroupService workGroupService;
@@ -28,7 +27,6 @@ public class WorkGroupController {
      * @return ReqResult
      */
     @RequestMapping(value = "/add")
-    @ResponseBody
     public ReqResult<?> add(@RequestBody WorkGroupVO workGroupVO) {
         try {
             workGroupService.add(workGroupVO);
@@ -44,7 +42,6 @@ public class WorkGroupController {
      * @return ReqResult
      */
     @RequestMapping(value = "/edit")
-    @ResponseBody
     public ReqResult<?> edit(@RequestBody WorkGroupVO workGroupVO) {
         try {
             workGroupService.edit(workGroupVO);
@@ -60,7 +57,6 @@ public class WorkGroupController {
      * @return ReqResult
      */
     @RequestMapping(value = "/delete/{ids}")
-    @ResponseBody
     public ReqResult<?> delete(@PathVariable String ids) {
         try {
             workGroupService.delete(ids);
