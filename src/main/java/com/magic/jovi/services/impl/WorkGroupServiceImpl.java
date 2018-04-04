@@ -56,7 +56,7 @@ public class WorkGroupServiceImpl implements WorkGroupService {
             workGroupRepo.save(workGroup);
 
         }else {
-            throw new RuntimeException("表数据不存在");
+            throw new RuntimeException("工作组表数据不存在");
         }
     }
 

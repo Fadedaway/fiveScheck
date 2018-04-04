@@ -13,4 +13,15 @@ public interface WorkPositionService {
      */
     void add(WorkPositionVO workPositionVO);
 
+    /**
+     * 更新工作站位
+     * @param workPositionVO 前台传入数据
+     */
+    void edit(WorkPositionVO workPositionVO);
+
+    /**
+     * 删除工作站位
+     * @param ids 以逗号分隔的id
+     */
+    void delete(String ids);
 }

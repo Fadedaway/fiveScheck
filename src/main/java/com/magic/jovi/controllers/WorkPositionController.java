@@ -4,6 +4,7 @@ import com.magic.jovi.entities.vo.WorkPositionVO;
 import com.magic.jovi.services.WorkPositionService;
 import com.magic.jovi.utils.ReqResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +34,38 @@ public class WorkPositionController {
         try {
             workPositionService.add(workPositionVO);
             return ReqResult.success("新增完成");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ReqResult.failure(e.getMessage());
+        }
+    }
+
+    /**
+     * 更新工作站位
+     * @param workPositionVO 前台传入数据
+     * @return ReqResult
+     */
+    @RequestMapping(value = "/edit")
+    public ReqResult<?> edit(@RequestBody WorkPositionVO workPositionVO) {
+        try {
+            workPositionService.edit(workPositionVO);
+            return ReqResult.success("更新成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ReqResult.failure(e.getMessage());
+        }
+    }
+
+    /**
+     * 删除工作站位
+     * @param ids 工作站位id，以逗号分割
+     * @return ReqResult
+     */
+    @RequestMapping(value = "/delete/{ids}")
+    public ReqResult<?> delete(@PathVariable String ids) {
+        try {
+            workPositionService.delete(ids);
+            return ReqResult.success("删除工作站位成功");
         } catch (Exception e) {
             e.printStackTrace();
             return ReqResult.failure(e.getMessage());
