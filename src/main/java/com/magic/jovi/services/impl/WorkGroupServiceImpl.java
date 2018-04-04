@@ -1,20 +1,23 @@
 package com.magic.jovi.services.impl;
 
 import com.magic.jovi.entities.WorkGroup;
+import com.magic.jovi.entities.vo.PageVO;
 import com.magic.jovi.entities.vo.WorkGroupVO;
 import com.magic.jovi.repositories.WorkGroupRepo;
 import com.magic.jovi.services.WorkGroupService;
+import com.magic.jovi.specification.SimplePageBuilder;
+import com.magic.jovi.specification.SimpleSortBuilder;
 import com.magic.jovi.specification.SimpleSpecificationBuilder;
 import com.magic.jovi.utils.DeleteStatus;
 import com.magic.jovi.utils.OperateSymbol;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -80,7 +83,10 @@ public class WorkGroupServiceImpl implements WorkGroupService {
     }
 
     @Override
-    public List<WorkGroup> findAll() {
-        return workGroupRepo.findAll(new SimpleSpecificationBuilder<WorkGroup>("isDeleted",OperateSymbol.E.getSymbol(), DeleteStatus.enable.ordinal()).generateSpecification());
+    @SuppressWarnings("unchecked")
+    public Page<WorkGroup> findAll(PageVO pageVO) {
+        return workGroupRepo.findAll(new SimpleSpecificationBuilder<WorkGroup>("isDeleted",
+                OperateSymbol.E.getSymbol(), DeleteStatus.enable.ordinal()).generateSpecification()
+        , SimplePageBuilder.generate(pageVO.getPage(), SimpleSortBuilder.generateSort("createTime_d")));
     }
 }

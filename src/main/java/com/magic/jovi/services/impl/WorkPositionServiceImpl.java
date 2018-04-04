@@ -1,12 +1,20 @@
 package com.magic.jovi.services.impl;
 
 import com.magic.jovi.entities.WorkPosition;
+import com.magic.jovi.entities.vo.PageVO;
 import com.magic.jovi.entities.vo.WorkPositionVO;
 import com.magic.jovi.repositories.WorkPositionRepo;
 import com.magic.jovi.services.WorkPositionService;
+import com.magic.jovi.specification.SimplePageBuilder;
+import com.magic.jovi.specification.SimpleSortBuilder;
+import com.magic.jovi.specification.SimpleSpecification;
+import com.magic.jovi.specification.SimpleSpecificationBuilder;
+import com.magic.jovi.utils.DeleteStatus;
+import com.magic.jovi.utils.OperateSymbol;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,5 +81,13 @@ public class WorkPositionServiceImpl implements WorkPositionService {
                 }
             }
         });
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Page<WorkPosition> findAll(PageVO pageVO) {
+        return workPositionRepo.findAll(new SimpleSpecificationBuilder<WorkPosition>("isDeleted",
+                OperateSymbol.E.getSymbol(), DeleteStatus.enable.ordinal()).generateSpecification(),
+                SimplePageBuilder.generate(pageVO.getPage(), SimpleSortBuilder.generateSort("createTime_d")));
     }
 }

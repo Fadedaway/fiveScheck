@@ -1,13 +1,11 @@
 package com.magic.jovi.controllers;
 
+import com.magic.jovi.entities.vo.PageVO;
 import com.magic.jovi.entities.vo.WorkPositionVO;
 import com.magic.jovi.services.WorkPositionService;
 import com.magic.jovi.utils.ReqResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by fanjiawei on 2018/4/3
@@ -69,6 +67,22 @@ public class WorkPositionController {
         } catch (Exception e) {
             e.printStackTrace();
             return ReqResult.failure(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询所有的工作站位
+     * @param page 当前页
+     * @return ReqResult
+     */
+    @RequestMapping(value = "/findAll")
+    public ReqResult<?> findAll(@RequestParam int page) {
+        try {
+            PageVO pageVO = new PageVO(page);
+            return ReqResult.success(workPositionService.findAll(pageVO), pageVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ReqResult.failure("查询失败：" + e.getMessage());
         }
     }
 }

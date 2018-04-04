@@ -1,9 +1,9 @@
 package com.magic.jovi.services;
 
 import com.magic.jovi.entities.WorkGroup;
+import com.magic.jovi.entities.vo.PageVO;
 import com.magic.jovi.entities.vo.WorkGroupVO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 /**
  * Created by fanjiawei on 2018/3/31
@@ -30,7 +30,8 @@ public interface WorkGroupService {
 
     /**
      * 查处所有未删除的数据
+     * @param pageVO 分页数据
      * @return List
      */
-    List<WorkGroup> findAll();
+    Page<WorkGroup> findAll(PageVO pageVO);
 }

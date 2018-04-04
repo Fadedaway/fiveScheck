@@ -1,5 +1,6 @@
 package com.magic.jovi.controllers;
 
+import com.magic.jovi.entities.vo.PageVO;
 import com.magic.jovi.entities.vo.WorkGroupVO;
 import com.magic.jovi.services.WorkGroupService;
 import com.magic.jovi.utils.ReqResult;
@@ -71,12 +72,14 @@ public class WorkGroupController {
 
     /**
      * 查询所有的工作组
+     * @param page 当前页码
      * @return ReqResult
      */
     @RequestMapping(value = "/findAll")
-    public ReqResult<?> findAll() {
+    public ReqResult<?> findAll(@RequestParam int page) {
         try {
-            return ReqResult.success(workGroupService.findAll());
+            PageVO pageVO = new PageVO(page);
+            return ReqResult.success(workGroupService.findAll(pageVO), pageVO);
         }catch (Exception e) {
             e.printStackTrace();
             return ReqResult.failure(e.getMessage());
