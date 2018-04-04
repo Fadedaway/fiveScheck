@@ -32,10 +32,8 @@ public class WorkGroupServiceTest {
     public void findAll() {
         List<WorkGroup> workGroups = workGroupService.findAll();
         System.out.println("size : " + workGroups.size());
-        workGroups.stream().forEach(workGroup ->
-                {
-                    System.out.println("name: " + workGroup.getName());
-                }
+        workGroups.forEach(workGroup ->
+                System.out.println("name: " + workGroup.getName())
         );
     }
 }

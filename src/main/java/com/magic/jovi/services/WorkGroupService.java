@@ -1,5 +1,6 @@
 package com.magic.jovi.services;
 
+import com.magic.jovi.entities.WorkGroup;
 import com.magic.jovi.entities.vo.WorkGroupVO;
 
 import java.util.List;
@@ -31,5 +32,5 @@ public interface WorkGroupService {
      * 查处所有未删除的数据
      * @return List
      */
-    List findAll();
+    List<WorkGroup> findAll();
 }
