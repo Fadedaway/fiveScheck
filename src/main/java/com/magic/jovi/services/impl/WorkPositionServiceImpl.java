@@ -1,5 +1,6 @@
 package com.magic.jovi.services.impl;
 
+import com.magic.jovi.entities.vo.WorkPositionVO;
 import com.magic.jovi.services.WorkPositionService;
 import org.springframework.stereotype.Service;
 
@@ -8,4 +9,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class WorkPositionServiceImpl implements WorkPositionService {
+
+
+    @Override
+    public void add(WorkPositionVO workPositionVO) {
+
+    }
 }

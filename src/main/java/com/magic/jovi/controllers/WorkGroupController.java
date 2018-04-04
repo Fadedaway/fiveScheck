@@ -32,6 +32,7 @@ public class WorkGroupController {
             workGroupService.add(workGroupVO);
             return ReqResult.success("新增成功");
         }catch (Exception e) {
+            e.printStackTrace();
             return ReqResult.failure(e.getMessage());
         }
     }
@@ -47,6 +48,7 @@ public class WorkGroupController {
             workGroupService.edit(workGroupVO);
             return ReqResult.success("编辑成功");
         }catch (Exception e) {
+            e.printStackTrace();
             return ReqResult.failure(e.getMessage());
         }
     }
@@ -61,6 +63,20 @@ public class WorkGroupController {
         try {
             workGroupService.delete(ids);
             return ReqResult.success("删除成功");
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ReqResult.failure(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询所有的工作组
+     * @return ReqResult
+     */
+    @RequestMapping(value = "/findAll")
+    public ReqResult<?> findAll() {
+        try {
+            return ReqResult.success(workGroupService.findAll());
         }catch (Exception e) {
             e.printStackTrace();
             return ReqResult.failure(e.getMessage());
