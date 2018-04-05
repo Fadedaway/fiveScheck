@@ -45,12 +45,12 @@ public class WorkPositionServiceImpl implements WorkPositionService {
 
     @Override
     public void edit(WorkPositionVO workPositionVO) {
-        if (null == workPositionVO)
+        if (Objects.isNull(workPositionVO))
             throw new RuntimeException("数据不存在");
-        if (StringUtils.isNotBlank(workPositionVO.getId()))
+        if (Objects.isNull(workPositionVO.getId()))
             throw new RuntimeException("主键为空");
 
-        WorkPosition workPosition = workPositionRepo.findOne(workPositionVO.getId());
+        WorkPosition workPosition = workPositionRepo.findOneById(workPositionVO.getId());
 
         if (null != workPosition) {
 
@@ -74,10 +74,10 @@ public class WorkPositionServiceImpl implements WorkPositionService {
         //删除逻辑 批量删除
         Arrays.stream(idArray).forEach(id -> {
             if (StringUtils.isNotBlank(id)) {
-                WorkPosition workPosition = workPositionRepo.findOneById(id);
+                WorkPosition workPosition = workPositionRepo.findOneById(Long.valueOf(id));
 
                 if (Objects.nonNull(workPosition)) {
-                    workPositionRepo.logicalDelete(id);
+                    workPositionRepo.logicalDelete(Long.valueOf(id));
                 }
             }
         });

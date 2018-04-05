@@ -44,12 +44,12 @@ public class WorkGroupServiceImpl implements WorkGroupService {
 
     @Override
     public void edit(WorkGroupVO workGroupVO) {
-        if (null == workGroupVO)
+        if (Objects.isNull(workGroupVO))
             throw new RuntimeException("数据不存在");
-        if (StringUtils.isNotBlank(workGroupVO.getId()))
+        if (Objects.isNull(workGroupVO.getId()))
             throw new RuntimeException("主键为空");
 
-        WorkGroup workGroup = workGroupRepo.findOne(workGroupVO.getId());
+        WorkGroup workGroup = workGroupRepo.findOneById(workGroupVO.getId());
 
         if (null != workGroup) {
 
@@ -73,10 +73,10 @@ public class WorkGroupServiceImpl implements WorkGroupService {
         //删除逻辑 批量删除
         Arrays.stream(idArray).forEach(id -> {
             if (StringUtils.isNotBlank(id)) {
-                WorkGroup workGroup = workGroupRepo.findOneById(id);
+                WorkGroup workGroup = workGroupRepo.findOneById(Long.valueOf(id));
 
                 if (Objects.nonNull(workGroup)) {
-                    workGroupRepo.logicalDelete(id);
+                    workGroupRepo.logicalDelete(Long.valueOf(id));
                 }
             }
         });

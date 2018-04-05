@@ -10,7 +10,7 @@ public abstract class BaseVO implements Serializable {
 
     private static final long serialVersionUID = -1586054152340145113L;
 
-    private String id;
+    private Long id;
 
     private int isDeleted;
 
@@ -24,11 +24,11 @@ public abstract class BaseVO implements Serializable {
 
     private Date modifyTime;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
