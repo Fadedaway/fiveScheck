@@ -4,12 +4,19 @@ import com.magic.jovi.entities.WorkProblem;
 import com.magic.jovi.entities.vo.WorkProblemVO;
 import com.magic.jovi.repositories.WorkProblemRepo;
 import com.magic.jovi.services.WorkProblemService;
+import com.magic.jovi.specification.SimplePageBuilder;
+import com.magic.jovi.specification.SimpleSortBuilder;
+import com.magic.jovi.specification.SimpleSpecificationBuilder;
+import com.magic.jovi.utils.DeleteStatus;
+import com.magic.jovi.utils.OperateSymbol;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -59,6 +66,25 @@ public class WorkProblemServiceImpl implements WorkProblemService {
 
     @Override
     public void delete(String ids) {
-        //TODO 删除逻辑
+        if (StringUtils.isBlank(ids))
+            throw new RuntimeException("传入数据为空");
+        String[] idArray = ids.split(",");
+        //批量删除
+        Arrays.stream(idArray).forEach(id -> {
+            if (StringUtils.isNotBlank(id)) {
+                WorkProblem workProblem = workProblemRepo.findOneById(Long.valueOf(id));
+
+                if (Objects.nonNull(workProblem))
+                    workProblemRepo.logicalDelete(workProblem.getId());
+            }
+        });
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Page<WorkProblem> findAll(int page) {
+        return workProblemRepo.findAll(new SimpleSpecificationBuilder<WorkProblem>("isDeleted",
+                        OperateSymbol.E.getSymbol(), DeleteStatus.enable.ordinal()).generateSpecification(),
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createTime_d")));
     }
 }

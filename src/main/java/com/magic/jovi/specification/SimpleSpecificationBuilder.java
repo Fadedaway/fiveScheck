@@ -53,7 +53,7 @@ public class SimpleSpecificationBuilder<T> {
      * 添加and的条件
      * @return
      */
-    public SimpleSpecificationBuilder add(String key,String oper,Object value) {
+    public SimpleSpecificationBuilder addAnd(String key,String oper,Object value) {
         return this.add(key,oper,value,"and");
     }
 

@@ -4,10 +4,7 @@ import com.magic.jovi.entities.vo.WorkProblemVO;
 import com.magic.jovi.services.WorkProblemService;
 import com.magic.jovi.utils.ReqResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by fanjiawei on 2018/4/5
@@ -60,7 +57,7 @@ public class WorkProblemController {
      * @param ids 问题主键，逗号分隔
      * @return ReqResult
      */
-    @RequestMapping(value = "/delete")
+    @RequestMapping(value = "/delete/{ids}")
     public ReqResult<?> delete(@PathVariable String ids) {
         try {
             workProblemService.delete(ids);
@@ -68,6 +65,21 @@ public class WorkProblemController {
         } catch (Exception e) {
             e.printStackTrace();
             return ReqResult.failure("删除工作问题失败：" + e.getMessage());
+        }
+    }
+
+    /**
+     * 分页查询
+     * @param page 当前页码
+     * @return ReqResult
+     */
+    @RequestMapping(value = "/findAll")
+    public ReqResult<?> findAll(@RequestParam int page) {
+        try {
+            return ReqResult.success(workProblemService.findAll(page));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ReqResult.failure("查询失败：" + e.getMessage());
         }
     }
 }
