@@ -7,7 +7,6 @@ import com.magic.jovi.repositories.WorkPositionRepo;
 import com.magic.jovi.services.WorkPositionService;
 import com.magic.jovi.specification.SimplePageBuilder;
 import com.magic.jovi.specification.SimpleSortBuilder;
-import com.magic.jovi.specification.SimpleSpecification;
 import com.magic.jovi.specification.SimpleSpecificationBuilder;
 import com.magic.jovi.utils.DeleteStatus;
 import com.magic.jovi.utils.OperateSymbol;
