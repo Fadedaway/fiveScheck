@@ -85,4 +85,13 @@ public class WorkGroupController {
             return ReqResult.failure(e.getMessage());
         }
     }
+
+    /**
+     * 所有未删除工作组
+     * @return ReqResult
+     */
+    @RequestMapping(value = "/findAllList", method = RequestMethod.GET)
+    public ReqResult<?> findAllList() {
+        return ReqResult.success(workGroupService.findAllList());
+    }
 }

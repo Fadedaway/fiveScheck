@@ -18,19 +18,19 @@ public class ProblemCollect extends BaseEntity{
      * 机台Id
      */
     @Column
-    private String positionId;
+    private Long positionId;
 
     /**
      * 工作组Id
      */
     @Column
-    private String groupId;
+    private Long groupId;
 
     /**
      * 问题Id
      */
     @Column
-    private String problemId;
+    private Long problemId;
 
     /**
      * 减分
@@ -44,27 +44,27 @@ public class ProblemCollect extends BaseEntity{
     @Column
     private Date checkDate;
 
-    public String getPositionId() {
+    public Long getPositionId() {
         return positionId;
     }
 
-    public void setPositionId(String positionId) {
+    public void setPositionId(Long positionId) {
         this.positionId = positionId;
     }
 
-    public String getGroupId() {
+    public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(String groupId) {
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
 
-    public String getProblemId() {
+    public Long getProblemId() {
         return problemId;
     }
 
-    public void setProblemId(String problemId) {
+    public void setProblemId(Long problemId) {
         this.problemId = problemId;
     }
 

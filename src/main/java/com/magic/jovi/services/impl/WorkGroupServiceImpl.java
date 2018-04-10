@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -88,5 +89,10 @@ public class WorkGroupServiceImpl implements WorkGroupService {
         return workGroupRepo.findAll(new SimpleSpecificationBuilder<WorkGroup>("isDeleted",
                 OperateSymbol.E.getSymbol(), DeleteStatus.enable.ordinal()).generateSpecification()
         , SimplePageBuilder.generate(pageVO.getPage(), SimpleSortBuilder.generateSort("createTime_d")));
+    }
+
+    @Override
+    public List<WorkGroup> findAllList() {
+        return workGroupRepo.findAllByIsDeleted(DeleteStatus.enable.ordinal());
     }
 }

@@ -5,6 +5,8 @@ import com.magic.jovi.entities.vo.PageVO;
 import com.magic.jovi.entities.vo.WorkGroupVO;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 /**
  * Created by fanjiawei on 2018/3/31
  */
@@ -31,7 +33,13 @@ public interface WorkGroupService {
     /**
      * 查处所有未删除的数据
      * @param pageVO 分页数据
-     * @return List
+     * @return Page
      */
     Page<WorkGroup> findAll(PageVO pageVO);
+
+    /**
+     * 所有为删除的工作组列表
+     * @return List
+     */
+    List<WorkGroup> findAllList();
 }
