@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -86,5 +87,10 @@ public class WorkProblemServiceImpl implements WorkProblemService {
         return workProblemRepo.findAll(new SimpleSpecificationBuilder<WorkProblem>("isDeleted",
                         OperateSymbol.E.getSymbol(), DeleteStatus.enable.ordinal()).generateSpecification(),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createTime_d")));
+    }
+
+    @Override
+    public List<WorkProblem> findAllList() {
+        return workProblemRepo.findAllByIsDeleted(DeleteStatus.enable.ordinal());
     }
 }

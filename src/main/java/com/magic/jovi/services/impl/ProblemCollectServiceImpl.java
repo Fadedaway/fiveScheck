@@ -68,4 +68,9 @@ public class ProblemCollectServiceImpl implements ProblemCollectService {
             return problemCollectVO;
         }).collect(Collectors.toList());
     }
+
+    @Override
+    public void gatherPoints(ProblemCollectVO problemCollectVO) {
+        //TODO 获取前台传入的问题id字符串与分数只和，更新入问题收集表中
+    }
 }

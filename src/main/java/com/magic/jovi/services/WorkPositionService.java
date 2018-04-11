@@ -5,6 +5,8 @@ import com.magic.jovi.entities.vo.PageVO;
 import com.magic.jovi.entities.vo.WorkPositionVO;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 /**
  * Created by fanjiawei on 2018/4/3
  */
@@ -34,4 +36,10 @@ public interface WorkPositionService {
      * @return Page
      */
     Page<WorkPosition> findAll(PageVO pageVO);
+
+    /**
+     * 查询所有的工作站位
+     * @return List
+     */
+    List<WorkPosition> findAllList();
 }

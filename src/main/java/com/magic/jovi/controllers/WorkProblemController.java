@@ -82,4 +82,13 @@ public class WorkProblemController {
             return ReqResult.failure("查询失败：" + e.getMessage());
         }
     }
+
+    /**
+     * 查询所有的问题选项
+     * @return List
+     */
+    @RequestMapping(value = "/findAllList")
+    public ReqResult<?> findAllList() {
+        return ReqResult.success(workProblemService.findAllList());
+    }
 }

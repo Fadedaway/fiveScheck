@@ -16,4 +16,10 @@ public interface ProblemCollectService {
      * @return List
      */
     List<ProblemCollectVO> initData(String createDate, Long groupId);
+
+    /**
+     * 获取前台传入的问题id字符串与分数只和，更新入问题收集表中
+     * @param problemCollectVO 问题集合
+     */
+    void gatherPoints(ProblemCollectVO problemCollectVO);
 }

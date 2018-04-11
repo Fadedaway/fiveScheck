@@ -85,4 +85,13 @@ public class WorkPositionController {
             return ReqResult.failure("查询失败：" + e.getMessage());
         }
     }
+
+    /**
+     * 查询所有的工作站位 下拉框数据
+     * @return List
+     */
+    @RequestMapping(value = "/findAllList")
+    public ReqResult<?> findAllList() {
+        return ReqResult.success(workPositionService.findAllList());
+    }
 }

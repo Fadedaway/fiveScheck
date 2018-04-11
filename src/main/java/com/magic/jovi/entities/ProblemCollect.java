@@ -27,10 +27,10 @@ public class ProblemCollect extends BaseEntity{
     private Long groupId;
 
     /**
-     * 问题Id
+     * 问题Id 逗号分隔
      */
     @Column
-    private Long problemId;
+    private String problemId;
 
     /**
      * 减分
@@ -60,11 +60,11 @@ public class ProblemCollect extends BaseEntity{
         this.groupId = groupId;
     }
 
-    public Long getProblemId() {
+    public String getProblemId() {
         return problemId;
     }
 
-    public void setProblemId(Long problemId) {
+    public void setProblemId(String problemId) {
         this.problemId = problemId;
     }
 
