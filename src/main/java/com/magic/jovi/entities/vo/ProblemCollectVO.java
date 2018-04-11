@@ -32,7 +32,7 @@ public class ProblemCollectVO extends BaseVO {
     /**
      * 问题Id
      */
-    private Long problemId;
+    private String problemId;
 
     /**
      * 问题描述
@@ -52,7 +52,7 @@ public class ProblemCollectVO extends BaseVO {
     public ProblemCollectVO() {
     }
 
-    public ProblemCollectVO(Long positionId, String positionName, Long groupId, String groupName, Long problemId, String problemName, int point, Date checkDate) {
+    public ProblemCollectVO(Long positionId, String positionName, Long groupId, String groupName, String problemId, String problemName, int point, Date checkDate) {
         this.positionId = positionId;
         this.positionName = positionName;
         this.groupId = groupId;
@@ -95,11 +95,11 @@ public class ProblemCollectVO extends BaseVO {
         this.groupName = groupName;
     }
 
-    public Long getProblemId() {
+    public String getProblemId() {
         return problemId;
     }
 
-    public void setProblemId(Long problemId) {
+    public void setProblemId(String problemId) {
         this.problemId = problemId;
     }
 

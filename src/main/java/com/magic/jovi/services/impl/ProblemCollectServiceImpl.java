@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -71,6 +72,20 @@ public class ProblemCollectServiceImpl implements ProblemCollectService {
 
     @Override
     public void gatherPoints(ProblemCollectVO problemCollectVO) {
-        //TODO 获取前台传入的问题id字符串与分数只和，更新入问题收集表中
+        if (Objects.isNull(problemCollectVO))
+            throw new RuntimeException("传入数据为空");
+        if (Objects.isNull(problemCollectVO.getId()))
+            throw new RuntimeException("数据主键为空");
+
+        // 获取前台传入的问题id字符串与分数只和，更新入问题收集表中
+        ProblemCollect problemCollect = problemCollectRepo.findOneById(problemCollectVO.getId());
+
+        if (Objects.isNull(problemCollect))
+            throw new RuntimeException("数据不存在或已被删除");
+
+        problemCollect.setProblemId(problemCollectVO.getProblemId());
+        problemCollect.setPoint(problemCollectVO.getPoint());
+
+        problemCollectRepo.save(problemCollect);
     }
 }
