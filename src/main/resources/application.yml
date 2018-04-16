@@ -24,5 +24,9 @@ spring:
       naming:
         strategy: org.hibernate.cfg.ImprovedNamingStrategy
     database-platform: org.hibernate.dialect.MySQL5Dialect
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
 
 
