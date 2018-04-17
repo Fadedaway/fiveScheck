@@ -26,4 +26,9 @@ public class RouteController {
 
         return "collect";
     }
+
+    @RequestMapping(value = "/query")
+    public String query() {
+        return "query";
+    }
 }

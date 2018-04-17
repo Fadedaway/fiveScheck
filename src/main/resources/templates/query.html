@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<link rel="icon" type="image/x-icon" href="/static/image/favicon.ico"/>
+<body>
+<!-- 这是一个查询页面，选择日期/分组查询当天的数据 -->
+你好, 今天是<p id="dateValue" th:text="${#dates.format(#dates.createNow(), 'yyyy年MM月dd日')}" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"></p>
+</body>
+</html>
