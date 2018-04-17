@@ -35,14 +35,18 @@
     };
 
     $("#checkTheGroup").on('click', function () {
-        var dateValue = $("#dateValue").attr("value");
-        var groupId = $('select option:selected').val();
-        var groupName = $('select option:selected').text();
 
-        /*<![CDATA[*/
-        window.location.href = basePath + '/collect?dateValue=' + dateValue + '&groupId=' + groupId + '&groupName=' + groupName;
-        /*]]>*/
     });
+
+    // $("#checkTheGroup").on('click', function () {
+    //     var dateValue = $("#dateValue").attr("value");
+    //     var groupId = $('select option:selected').val();
+    //     var groupName = $('select option:selected').text();
+    //
+    //     /*<![CDATA[*/
+    //     window.location.href = basePath + '/collect?dateValue=' + dateValue + '&groupId=' + groupId + '&groupName=' + groupName;
+    //     /*]]>*/
+    // });
 
     getAllGroup();
 </script>
