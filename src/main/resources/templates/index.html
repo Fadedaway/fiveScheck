@@ -6,9 +6,14 @@
 你好, 今天是<p id="dateValue" th:text="${#dates.format(#dates.createNow(), 'yyyy年MM月dd日')}" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"></p>
 
 <br/>
-<label for="groupId" class="col-form-label col-2">请选择检查对象：</label><select id="groupId" class="custom-select col-1"></select>
-<button id="checkTheGroup" class="btn-info">确定</button>
-<button id="pastQuery" class="btn-primary">往期查询</button>
+<div style="overflow: hidden;">
+    <label for="groupId" class="col-form-label col-2">请选择检查对象：</label><select id="groupId" class="custom-select col-1"></select>
+    <button id="checkTheGroup" class="btn-info">确定</button>
+    <button id="pastQuery" class="btn-primary">往期查询</button>
+    <button class="btn-primary" id="groupAdd" style="margin-right: 5px;float: right;margin-top: 5px;">新增小组</button>
+    <button class="btn-primary" id="positionAdd" style="margin-right: 5px;float: right;margin-top: 5px;">新增机器</button>
+    <button class="btn-primary" id="problemAdd" style="margin-right: 5px;float: right;margin-top: 5px;">新增问题</button>
+</div>
 <div>
     <table class="table table-bordered">
         <thead>
