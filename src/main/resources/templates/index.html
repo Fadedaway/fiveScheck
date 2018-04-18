@@ -10,9 +10,9 @@
     <label for="groupId" class="col-form-label col-2">请选择检查对象：</label><select id="groupId" class="custom-select col-1"></select>
     <button id="checkTheGroup" class="btn-info">确定</button>
     <button id="pastQuery" class="btn-primary">往期查询</button>
-    <button class="btn-primary" id="groupAdd" style="margin-right: 5px;float: right;margin-top: 5px;">新增小组</button>
-    <button class="btn-primary" id="positionAdd" style="margin-right: 5px;float: right;margin-top: 5px;">新增机器</button>
-    <button class="btn-primary" id="problemAdd" style="margin-right: 5px;float: right;margin-top: 5px;">新增问题</button>
+    <button class="btn-primary" id="groupList" style="margin-right: 5px;float: right;margin-top: 5px;">小组管理</button>
+    <button class="btn-primary" id="positionList" style="margin-right: 5px;float: right;margin-top: 5px;">机器管理</button>
+    <button class="btn-primary" id="problemList" style="margin-right: 5px;float: right;margin-top: 5px;">问题管理</button>
 </div>
 <div>
     <table class="table table-bordered">
@@ -61,6 +61,18 @@
 
     $("#pastQuery").on('click', function () {
        window.location.href = basePath + '/query';
+    });
+
+    $("#groupList").on('click', function () {
+       window.location.href = basePath + '/group';
+    });
+
+    $("#positionList").on('click', function () {
+        window.location.href = basePath + '/position';
+    });
+
+    $("#problemList").on('click', function () {
+        window.location.href = basePath + '/problem';
     });
 
     // $("#checkTheGroup").on('click', function () {

@@ -31,4 +31,19 @@ public class RouteController {
     public String query() {
         return "query";
     }
+
+    @RequestMapping(value = "/group")
+    public String group() {
+        return "group";
+    }
+
+    @RequestMapping(value = "/problem")
+    public String problem() {
+        return "problem";
+    }
+
+    @RequestMapping(value = "/position")
+    public String position() {
+        return "position";
+    }
 }
