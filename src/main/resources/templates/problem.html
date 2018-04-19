@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>问题管理</title>
+    <title>5S检查-问题管理</title>
     <link rel="icon" type="image/x-icon" href="/static/image/favicon.ico"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" />
 </head>
@@ -18,6 +18,8 @@
             <tr>
                 <th width="5%">序号</th>
                 <th>名称</th>
+                <td>扣分</td>
+                <td>描述</td>
                 <th>操作</th>
             </tr>
             </thead>
@@ -53,14 +55,14 @@
         var _tBody = $("#problemData");
 
         if (data === undefined || null == data || data.length === 0) {
-            _tBody.html('<tr><td colspan="3" align="center">没有查询到数据</td></tr>');
+            _tBody.html('<tr><td colspan="5" align="center">没有查询到数据</td></tr>');
             return;
         }
 
         var _html = '';
 
         $(data).each(function (i, item) {
-            _html += '<tr><td>'+i+'</td><td>'+item.name+'</td><td>编辑 删除</td></tr>';
+            _html += '<tr><td>'+(i+1)+'</td><td>'+item.name+'</td><td>'+item.point+'</td><td>'+item.detail+'</td><td>编辑 删除</td></tr>';
         });
 
         _tBody.html(_html);

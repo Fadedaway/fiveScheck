@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
-<link rel="icon" type="image/x-icon" href="/static/image/favicon.ico"/>
-<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" />
+<head>
+    <meta charset="UTF-8" />
+    <title>5S检查</title>
+    <link rel="icon" type="image/x-icon" href="/static/image/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" />
+</head>
 <body>
 你好, 今天是<p id="dateValue" th:text="${#dates.format(#dates.createNow(), 'yyyy年MM月dd日')}" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"></p>
 
