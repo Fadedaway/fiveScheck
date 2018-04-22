@@ -28,7 +28,7 @@ public class WorkPositionController {
      * @return ReqResult
      */
     @RequestMapping(value = "/add")
-    public ReqResult<?> add(@RequestBody WorkPositionVO workPositionVO) {
+    public ReqResult<?> add(WorkPositionVO workPositionVO) {
         try {
             workPositionService.add(workPositionVO);
             return ReqResult.success("新增完成");
@@ -44,13 +44,28 @@ public class WorkPositionController {
      * @return ReqResult
      */
     @RequestMapping(value = "/edit")
-    public ReqResult<?> edit(@RequestBody WorkPositionVO workPositionVO) {
+    public ReqResult<?> edit(WorkPositionVO workPositionVO) {
         try {
             workPositionService.edit(workPositionVO);
             return ReqResult.success("更新成功");
         } catch (Exception e) {
             e.printStackTrace();
             return ReqResult.failure(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询工作站位详情
+     * @param id 工作站位主键
+     * @return ReqResult
+     */
+    @RequestMapping(value = "/detail/{id}")
+    public ReqResult<?> detail(@PathVariable Long id) {
+        try {
+            return ReqResult.success(workPositionService.detail(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ReqResult.failure("查询机器详情失败：" + e.getMessage());
         }
     }
 

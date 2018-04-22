@@ -95,7 +95,7 @@ public class WorkProblemServiceImpl implements WorkProblemService {
     }
 
     @Override
-    public WorkProblem detail(String id) {
+    public WorkProblem detail(Long id) {
         return workProblemRepo.findOneById(id);
     }
 }

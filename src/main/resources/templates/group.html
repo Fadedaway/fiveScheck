@@ -5,6 +5,7 @@
     <title>5S检查-小组管理</title>
     <link rel="icon" type="image/x-icon" href="/static/image/favicon.ico"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/jquery.toast.min.css}"/>
 </head>
 <body>
     <div style="overflow: hidden;">
@@ -25,10 +26,64 @@
             </tbody>
         </table>
     </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" style="width: auto;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">小组编辑</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container col-md-12">
+                        <form id="groupForm">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span style="color: red;">*</span>小组名称：
+                                </div>
+
+                                <div class="col-md-8">
+                                    <input type="text" id="name" name="name" maxlength="10" placeholder="小组名称"/>
+                                    <input type="hidden" id="id" name="id"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="modalSaveBtn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/jquery.validate.min.js}"></script>
+<script th:src="@{/js/toast/alertTool.js}"></script>
+<script th:src="@{/js/toast/jquery.toast.min.js}"></script>
 <script th:inline="javascript">
     var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
+
+    var groupForm = $("#groupForm");
+
+    groupForm.validate({
+        rules: {
+            name:{
+                required: true,
+                maxlength: 10
+            }
+        },
+        message: {
+            name: {
+                required: "此项必填",
+                maxlength: "超出最大长度限制"
+            }
+        }
+    });
 
     //查询出所有小组数据
     var initData = function () {
@@ -60,14 +115,120 @@
         var _html = '';
 
         $(data).each(function (i, item) {
-            _html += '<tr><td>'+(i+1)+'</td><td>'+item.name+'</td><td>编辑 删除</td></tr>';
+            var _deleteHtml = '<a href="javascript:void(0);" onclick="deleteData('+item.id+');">删除</a>';
+            var _editHtml = '<a href="javascript:void(0);" onclick="editData('+item.id+');">编辑</a>';
+            _html += '<tr><td>'+(i+1)+'</td><td>'+item.name+'</td><td>'+_editHtml+' '+_deleteHtml+'</td></tr>';
         });
 
         _tBody.html(_html);
     };
 
+    var deleteData = function (id) {
+
+        $.ajax({
+            url :  basePath + "/workGroup/delete/" + id,
+            type:"POST",
+            success:function (data) {
+                if (data.success) {
+                    initData();
+                    alertTool.success("删除成功！");
+                } else {
+                    alertTool.error("删除失败！");
+                }
+            }
+        });
+    };
+
+    var editData = function (id) {
+
+        $.ajax({
+            url: basePath +"/workGroup/detail/" + id,
+            type:"GET",
+            success:function (data) {
+                if (data.success) {
+                    $("#id").val(data.data.id);
+                    $("#name").val(data.data.name);
+                    $("#myModal").modal("toggle");
+                } else {
+                    alertTool.error("加载数据失败！")
+                }
+            }
+        })
+    };
+
     var backToIndex = function() {
         window.location.href = basePath + '';
+    };
+
+    $("#groupAdd").on('click', function () {
+        $("#myModal").modal("toggle");
+    });
+
+    $("#modalSaveBtn").on('click', function () {
+        //禁用保存按钮
+        $("#modalSaveBtn").attr("disabled","disabled");
+
+        var param = groupForm.serialize();
+
+        var groupId = groupForm.find("[name='id']").val();
+        var saveUrl = '';
+        if (groupId == null || groupId === undefined || groupId === ''){    //没有id，操作判断为新增，否则为更新
+            saveUrl = basePath + "/workGroup/add";
+        }else{
+            saveUrl = basePath + "/workGroup/edit";
+        }
+        //校验信息
+        if(!groupForm.valid()){
+            //启用保存按钮
+            $("#modalSaveBtn").removeAttr("disabled");
+            return;
+        }
+
+        $.ajax({
+            url:saveUrl,
+            data:param,
+            type:"POST",
+            success:function (data) {
+                if (data.success){
+                    //启用保存按钮
+                    $("#modalSaveBtn").removeAttr("disabled");
+                    clearForm(groupForm);
+                    $('#myModal').modal('hide');
+                    initData();
+                    alertTool.info("保存成功");
+                }else{
+                    //启用保存按钮
+                    $("#modalSaveBtn").removeAttr("disabled");
+                    alertTool.info("保存失败");
+                }
+            },
+            error:function (data) {
+                //启用保存按钮
+                $("#modalSaveBtn").removeAttr("disabled");
+                alertTool.error(data);
+            }
+        });
+    });
+
+    var clearForm = function(form) {
+        // iterate over all of the inputs for the form
+        // element that was passed in
+        $(':input', form).each(function() {
+            var type = this.type;
+            var tag = this.tagName.toLowerCase(); // normalize case
+            // it's ok to reset the value attr of text inputs,
+            // hidden inputs, and textareas
+            if (type === 'text' || type === 'hidden' || tag === 'textarea' || type === 'file' || type === 'number')
+                this.value = "";
+            // checkboxes and radios need to have their checked state cleared
+            // but should *not* have their 'value' changed
+            else if (type === 'checkbox' || type === 'radio')
+                this.checked = false;
+            // select elements need to have their 'selectedIndex' property set to -1
+            // (this works for both single and multiple select elements)
+            else if (tag === 'select')
+                this.selectedIndex = 0;
+        });
     };
 
     $(function () {

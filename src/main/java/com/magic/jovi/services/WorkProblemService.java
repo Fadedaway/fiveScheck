@@ -47,5 +47,5 @@ public interface WorkProblemService {
      * @param id 问题主键
      * @return WorkProblem
      */
-    WorkProblem detail(String id);
+    WorkProblem detail(Long id);
 }

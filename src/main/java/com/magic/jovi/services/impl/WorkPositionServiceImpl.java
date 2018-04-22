@@ -95,4 +95,9 @@ public class WorkPositionServiceImpl implements WorkPositionService {
     public List<WorkPosition> findAllList() {
         return workPositionRepo.findAllByIsDeleted(DeleteStatus.enable.ordinal());
     }
+
+    @Override
+    public WorkPosition detail(Long id) {
+        return workPositionRepo.findOneById(id);
+    }
 }

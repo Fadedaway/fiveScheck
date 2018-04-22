@@ -42,4 +42,11 @@ public interface WorkGroupService {
      * @return List
      */
     List<WorkGroup> findAllList();
+
+    /**
+     * 查询工作组详情
+     * @param id 工作组主键
+     * @return WorkGroup
+     */
+    WorkGroup detail(Long id);
 }

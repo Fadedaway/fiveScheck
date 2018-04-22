@@ -28,7 +28,7 @@ public class WorkGroupController {
      * @return ReqResult
      */
     @RequestMapping(value = "/add")
-    public ReqResult<?> add(@RequestBody WorkGroupVO workGroupVO) {
+    public ReqResult<?> add(WorkGroupVO workGroupVO) {
         try {
             workGroupService.add(workGroupVO);
             return ReqResult.success("新增成功");
@@ -44,7 +44,7 @@ public class WorkGroupController {
      * @return ReqResult
      */
     @RequestMapping(value = "/edit")
-    public ReqResult<?> edit(@RequestBody WorkGroupVO workGroupVO) {
+    public ReqResult<?> edit(WorkGroupVO workGroupVO) {
         try {
             workGroupService.edit(workGroupVO);
             return ReqResult.success("编辑成功");
@@ -67,6 +67,21 @@ public class WorkGroupController {
         }catch (Exception e) {
             e.printStackTrace();
             return ReqResult.failure(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询工作组详情
+     * @param id 工作组主键
+     * @return ReqResult
+     */
+    @RequestMapping(value = "/detail/{id}")
+    public ReqResult<?> detail(@PathVariable Long id) {
+        try {
+            return ReqResult.success(workGroupService.detail(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ReqResult.failure("查询小组详情失败：" + e.getMessage());
         }
     }
 

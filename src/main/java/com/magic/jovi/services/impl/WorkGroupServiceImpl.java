@@ -95,4 +95,9 @@ public class WorkGroupServiceImpl implements WorkGroupService {
     public List<WorkGroup> findAllList() {
         return workGroupRepo.findAllByIsDeleted(DeleteStatus.enable.ordinal());
     }
+
+    @Override
+    public WorkGroup detail(Long id) {
+        return workGroupRepo.findOneById(id);
+    }
 }

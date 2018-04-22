@@ -215,14 +215,13 @@
         }else{
             saveUrl = basePath + "/workProblem/edit";
         }
-        //校验项目信息
+        //校验信息
         if(!problemForm.valid()){
             //启用保存按钮
             $("#modalSaveBtn").removeAttr("disabled");
             return;
         }
 
-        //保存季度项目信息,并将保存完的数据返回
         $.ajax({
             url:saveUrl,
             data:param,

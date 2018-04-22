@@ -42,4 +42,11 @@ public interface WorkPositionService {
      * @return List
      */
     List<WorkPosition> findAllList();
+
+    /**
+     * 查询工作站位
+     * @param id 工作站位主键
+     * @return WorkPosition
+     */
+    WorkPosition detail(Long id);
 }

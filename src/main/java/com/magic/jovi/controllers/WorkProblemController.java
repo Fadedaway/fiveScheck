@@ -74,7 +74,7 @@ public class WorkProblemController {
      * @return ReqResult
      */
     @RequestMapping(value = "/detail/{id}")
-    public ReqResult<?> detail(@PathVariable String id) {
+    public ReqResult<?> detail(@PathVariable Long id) {
         try {
             return ReqResult.success(workProblemService.detail(id));
         } catch (Exception e) {
