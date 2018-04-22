@@ -3,7 +3,10 @@ package com.magic.jovi.entities;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by fanjiawei on 2018/3/31
@@ -44,6 +47,9 @@ public class ProblemCollect extends BaseEntity{
     @Column
     private Date checkDate;
 
+    @Transient
+    private String checkDateStr;
+
     public Long getPositionId() {
         return positionId;
     }
@@ -82,5 +88,18 @@ public class ProblemCollect extends BaseEntity{
 
     public void setCheckDate(Date checkDate) {
         this.checkDate = checkDate;
+    }
+
+    public String getCheckDateStr() {
+        if (Objects.nonNull(checkDate)) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            return simpleDateFormat.format(checkDate);
+        }
+        return "";
+    }
+
+    public void setCheckDateStr(String checkDateStr) {
+        this.checkDateStr = checkDateStr;
     }
 }

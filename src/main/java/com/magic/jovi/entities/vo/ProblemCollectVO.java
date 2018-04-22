@@ -1,6 +1,8 @@
 package com.magic.jovi.entities.vo;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by fanjiawei on 2018/4/10
@@ -48,6 +50,8 @@ public class ProblemCollectVO extends BaseVO {
      * 检查时间
      */
     private Date checkDate;
+
+    private String checkDateStr;
 
     public ProblemCollectVO() {
     }
@@ -125,5 +129,18 @@ public class ProblemCollectVO extends BaseVO {
 
     public void setCheckDate(Date checkDate) {
         this.checkDate = checkDate;
+    }
+
+    public String getCheckDateStr() {
+        if (Objects.nonNull(checkDate)) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            simpleDateFormat.format(checkDate);
+        }
+        return checkDateStr;
+    }
+
+    public void setCheckDateStr(String checkDateStr) {
+        this.checkDateStr = checkDateStr;
     }
 }

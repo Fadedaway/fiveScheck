@@ -5,6 +5,7 @@
     <title>5S检查</title>
     <link rel="icon" type="image/x-icon" href="/static/image/favicon.ico"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/jquery.toast.min.css}"/>
 </head>
 <body>
 你好, 今天是<p id="dateValue" th:text="${#dates.format(#dates.createNow(), 'yyyy年MM月dd日')}" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"></p>
@@ -28,14 +29,18 @@
                 <th width="10%">机器</th>
                 <th width="*%">问题</th>
                 <th width="8%">扣分</th>
-                <!-- TODO 操作里为 确定 ，点击按钮时，保存这一行的数据 -->
-                <th width="5%">操作</th>
+                <th width="10%">操作</th>
             </tr>
         </thead>
+        <tbody id="collectData">
+        </tbody>
     </table>
 </div>
 </body>
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/toast/alertTool.js}"></script>
+<script th:src="@{/js/toast/jquery.toast.min.js}"></script>
 <script th:inline="javascript">
 
     var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
@@ -46,7 +51,6 @@
             url:basePath + "/workGroup/findAllList",
             type:"GET",
             success:function (data) {
-                console.log(data);
                 var _html = '';
                 if (data.success) {
                     $(data.data).each(function (i, item) {
@@ -62,8 +66,41 @@
     };
 
     $("#checkTheGroup").on('click', function () {
+        var createDate = $("#dateValue").attr("value");
+        var groupId = $("#groupId").val();
 
+        $.ajax({
+            /*<![CDATA[*/
+           url: basePath + "/problemCollect/initData?createDate="+createDate+"&groupId="+groupId,
+            /*]]>*/
+           type: "GET",
+           success:function (data) {
+               if (data.success) {
+                   installData(data.data);
+               } else {
+                   alertTool.error("数据加载失败！")
+               }
+           }
+        });
     });
+
+    var installData = function(data) {
+        var _tBody = $("#collectData");
+
+        if (data === undefined || null == data || data.length === 0) {
+            _tBody.html('<tr><td colspan="7" align="center">没有查询到数据</td></tr>');
+            return;
+        }
+
+        var _html = '';
+
+        $(data).each(function (i, item) {
+            _html += '<tr><td>'+(i+1)+'</td><td>'+item.checkDateStr+'</td><td>'+item.groupName+'</td>' +
+                '<td>'+item.positionName+'</td><td>'+item.problemName+'</td><td>'+item.point+'</td><td>选择扣分项</td></tr>';
+        });
+
+        _tBody.html(_html);
+    };
 
     $("#pastQuery").on('click', function () {
        window.location.href = basePath + '/query';
