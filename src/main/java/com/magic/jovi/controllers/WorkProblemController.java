@@ -26,7 +26,7 @@ public class WorkProblemController {
      * @return ReqResult
      */
     @RequestMapping(value = "/add")
-    public ReqResult<?> add(@RequestBody WorkProblemVO workProblemVO) {
+    public ReqResult<?> add(WorkProblemVO workProblemVO) {
         try {
             workProblemService.add(workProblemVO);
             return ReqResult.success("新增工作问题成功");
@@ -42,7 +42,7 @@ public class WorkProblemController {
      * @return ReqResult
      */
     @RequestMapping(value = "/edit")
-    public ReqResult<?> edit(@RequestBody WorkProblemVO workProblemVO) {
+    public ReqResult<?> edit(WorkProblemVO workProblemVO) {
         try {
             workProblemService.edit(workProblemVO);
             return ReqResult.success("更新工作问题成功");
@@ -65,6 +65,21 @@ public class WorkProblemController {
         } catch (Exception e) {
             e.printStackTrace();
             return ReqResult.failure("删除工作问题失败：" + e.getMessage());
+        }
+    }
+
+    /**
+     * 工作问题详情
+     * @param id 问题主键
+     * @return ReqResult
+     */
+    @RequestMapping(value = "/detail/{id}")
+    public ReqResult<?> detail(@PathVariable String id) {
+        try {
+            return ReqResult.success(workProblemService.detail(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ReqResult.failure("查询问题详情失败：" + e.getMessage());
         }
     }
 

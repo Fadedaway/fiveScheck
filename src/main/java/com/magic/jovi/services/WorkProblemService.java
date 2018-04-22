@@ -41,4 +41,11 @@ public interface WorkProblemService {
      * @return List
      */
     List<WorkProblem> findAllList();
+
+    /**
+     * 查询工作问题详情
+     * @param id 问题主键
+     * @return WorkProblem
+     */
+    WorkProblem detail(String id);
 }

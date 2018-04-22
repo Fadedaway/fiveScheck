@@ -93,4 +93,9 @@ public class WorkProblemServiceImpl implements WorkProblemService {
     public List<WorkProblem> findAllList() {
         return workProblemRepo.findAllByIsDeleted(DeleteStatus.enable.ordinal());
     }
+
+    @Override
+    public WorkProblem detail(String id) {
+        return workProblemRepo.findOneById(id);
+    }
 }

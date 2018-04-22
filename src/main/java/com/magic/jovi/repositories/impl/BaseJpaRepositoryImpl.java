@@ -72,7 +72,7 @@ public class BaseJpaRepositoryImpl<T extends BaseEntity, ID extends Serializable
             List<Predicate> predicateList = new ArrayList<>();
             predicateList.add(cb.equal(root.<Long>get("id"), id));
             //未删除数据
-            predicateList.add(cb.equal(root.<Integer>get("deleted"), DeleteStatus.enable.ordinal()));
+            predicateList.add(cb.equal(root.<Integer>get("isDeleted"), DeleteStatus.enable.ordinal()));
             return cb.and(predicateList.toArray(new Predicate[predicateList.size()]));
         });
     }
