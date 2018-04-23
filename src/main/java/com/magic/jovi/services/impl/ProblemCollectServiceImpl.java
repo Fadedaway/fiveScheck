@@ -118,6 +118,7 @@ public class ProblemCollectServiceImpl implements ProblemCollectService {
 
             problemCollectVO.setGroupName(workGroup.getName());
             problemCollectVO.setPositionName(workPosition.getName());
+            problemCollectVO.setProblemName("");
             return problemCollectVO;
         }).collect(Collectors.toList());
     }

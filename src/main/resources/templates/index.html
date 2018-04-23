@@ -36,6 +36,39 @@
         </tbody>
     </table>
 </div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" style="width: auto;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">选择发现的问题</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="inlineCheckbox1" value="option1"/> 选项 1
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="inlineCheckbox2" value="option2"/> 选项 2
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="inlineCheckbox3" value="option3"/> 选项 3
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optionsRadiosinline" id="optionsRadios3" value="option1" checked="true"/> 选项 1
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optionsRadiosinline" id="optionsRadios4"  value="option2"/> 选项 2
+                </label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="modalSaveBtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
@@ -95,12 +128,17 @@
         var _html = '';
 
         $(data).each(function (i, item) {
+            var checkHtml = '<button class="btn-warning" onclick="showModal(1,1)">选择扣分项</button>';
             _html += '<tr><td>'+(i+1)+'</td><td>'+item.checkDateStr+'</td><td>'+item.groupName+'</td>' +
-                '<td>'+item.positionName+'</td><td>'+item.problemName+'</td><td>'+item.point+'</td><td>选择扣分项</td></tr>';
+                '<td>'+item.positionName+'</td><td>'+item.problemName+'</td><td>'+item.point+'</td><td>'+checkHtml+'</td></tr>';
         });
 
         _tBody.html(_html);
     };
+
+    var showModal = function(id, problemIds) {
+        $("#myModal").modal("toggle");
+    }
 
     $("#pastQuery").on('click', function () {
        window.location.href = basePath + '/query';
