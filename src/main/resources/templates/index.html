@@ -13,7 +13,7 @@
 <br/>
 <div style="overflow: hidden;">
     <label for="groupId" class="col-form-label col-2">请选择检查对象：</label><select id="groupId" class="custom-select col-1"></select>
-    <button id="checkTheGroup" class="btn-info">确定</button>
+    <button id="checkTheGroup" class="btn-info" onclick="checkTheGroup();">确定</button>
     <button id="pastQuery" class="btn-primary">往期查询</button>
     <button class="btn-primary" id="groupList" style="margin-right: 5px;float: right;margin-top: 5px;">小组管理</button>
     <button class="btn-primary" id="positionList" style="margin-right: 5px;float: right;margin-top: 5px;">机器管理</button>
@@ -46,21 +46,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <label class="checkbox-inline">
-                    <input type="checkbox" id="inlineCheckbox1" value="option1"/> 选项 1
-                </label>
-                <label class="checkbox-inline">
-                    <input type="checkbox" id="inlineCheckbox2" value="option2"/> 选项 2
-                </label>
-                <label class="checkbox-inline">
-                    <input type="checkbox" id="inlineCheckbox3" value="option3"/> 选项 3
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="optionsRadiosinline" id="optionsRadios3" value="option1" checked="true"/> 选项 1
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="optionsRadiosinline" id="optionsRadios4"  value="option2"/> 选项 2
-                </label>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -78,16 +64,38 @@
 
     var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
 
+    var problems = [];
+
+    var initAllProblems = function () {
+      $.ajax({
+          url: basePath + "/workProblem/findAllList",
+          type: "GET",
+          async:false,
+          success: function (data) {
+              if (data.success) {
+                  problems = data.data;
+              } else {
+                  alertTool.error("加载工作问题失败！");
+              }
+          }
+      });
+    };
+
     //分组下拉框
     var getAllGroup = function () {
         $.ajax({
             url:basePath + "/workGroup/findAllList",
             type:"GET",
+            async:false,
             success:function (data) {
                 var _html = '';
                 if (data.success) {
                     $(data.data).each(function (i, item) {
-                        _html += ('<option value="'+item.id+'">'+item.name+'</option>');
+
+                        if (i === 0)
+                            _html += ('<option value="'+item.id+'" selected="selected">'+item.name+'</option>');
+                        else
+                            _html += ('<option value="'+item.id+'">'+item.name+'</option>');
                     });
                     $("#groupId").html(_html);
                 }
@@ -98,24 +106,25 @@
         });
     };
 
-    $("#checkTheGroup").on('click', function () {
+    var checkTheGroup = function() {
         var createDate = $("#dateValue").attr("value");
         var groupId = $("#groupId").val();
 
         $.ajax({
             /*<![CDATA[*/
-           url: basePath + "/problemCollect/initData?createDate="+createDate+"&groupId="+groupId,
+            url: basePath + "/problemCollect/initData?createDate="+createDate+"&groupId="+groupId,
             /*]]>*/
-           type: "GET",
-           success:function (data) {
-               if (data.success) {
-                   installData(data.data);
-               } else {
-                   alertTool.error("数据加载失败！")
-               }
-           }
+            type: "GET",
+            async:false,
+            success:function (data) {
+                if (data.success) {
+                    installData(data.data);
+                } else {
+                    alertTool.error("数据加载失败！")
+                }
+            }
         });
-    });
+    };
 
     var installData = function(data) {
         var _tBody = $("#collectData");
@@ -128,7 +137,8 @@
         var _html = '';
 
         $(data).each(function (i, item) {
-            var checkHtml = '<button class="btn-warning" onclick="showModal(1,1)">选择扣分项</button>';
+            var checkHtml = '<button class="btn-warning" onclick="showModal('+item.id+', '+i+')">选择扣分项</button>' +
+                '<input type="hidden" value="'+item.problemId+'" id="hiddenP'+i+'"/>';
             _html += '<tr><td>'+(i+1)+'</td><td>'+item.checkDateStr+'</td><td>'+item.groupName+'</td>' +
                 '<td>'+item.positionName+'</td><td>'+item.problemName+'</td><td>'+item.point+'</td><td>'+checkHtml+'</td></tr>';
         });
@@ -136,9 +146,48 @@
         _tBody.html(_html);
     };
 
+    var installProblemData = function (id, i) {
+        initAllProblems();
+
+        $(".modal-body").html('');
+
+        var ids = $("#hiddenP"+i).val();
+        var idArray = [];
+
+        if (ids === undefined || ids == null || ids === '') {
+            idArray = [];
+        } else {
+            idArray = ids.split(",");
+        }
+
+        var _html = '<input type="hidden" id="id" value="'+id+'"/>';
+
+        $(problems).each(function (i, item) {
+
+            if (idArray.indexOf(""+item.id) >= 0) {
+
+                _html += '<label class="checkbox-inline">' +
+                    '<input type="checkbox" name="problemId" value="'+item.id+'" checked="checked"/> '+ item.name +
+                    '</label>&nbsp;&nbsp;&nbsp;&nbsp;';
+            } else {
+
+                _html += '<label class="checkbox-inline">' +
+                    '<input type="checkbox" name="problemId" value="'+item.id+'" /> '+ item.name +
+                    '</label>&nbsp;&nbsp;&nbsp;&nbsp;';
+            }
+
+            if ((i + 1) % 3 === 0) {
+                _html += '<br/>';
+            }
+        });
+
+        $(".modal-body").html(_html);
+    };
+
     var showModal = function(id, problemIds) {
+        installProblemData(id, problemIds);
         $("#myModal").modal("toggle");
-    }
+    };
 
     $("#pastQuery").on('click', function () {
        window.location.href = basePath + '/query';
@@ -156,16 +205,44 @@
         window.location.href = basePath + '/problem';
     });
 
-    // $("#checkTheGroup").on('click', function () {
-    //     var dateValue = $("#dateValue").attr("value");
-    //     var groupId = $('select option:selected').val();
-    //     var groupName = $('select option:selected').text();
-    //
-    //     /*<![CDATA[*/
-    //     window.location.href = basePath + '/collect?dateValue=' + dateValue + '&groupId=' + groupId + '&groupName=' + groupName;
-    //     /*]]>*/
-    // });
+    $("#modalSaveBtn").on('click', function () {
+        var arr = [];
 
-    getAllGroup();
+        $("input[name='problemId']:checked").each(function(){
+            arr.push($(this).val());
+        });
+
+        if(arr.length === 0){
+            alertTool.warning('请选择数据!');
+            return;
+        }
+
+        var param = {
+            id : $("#id").val(),
+            problemId : arr.join(",")
+        };
+
+        $.ajax({
+            url: basePath + "/problemCollect/gatherPoints",
+            type: "POST",
+            data: JSON.stringify(param),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    checkTheGroup();
+                    $("#myModal").modal('hide');
+                    alertTool.success("设置成功！");
+                } else {
+                    alertTool.error("设置失败！");
+                }
+            }
+        });
+    });
+
+    $(function () {
+        getAllGroup();
+        checkTheGroup();
+    });
 </script>
 </html>
