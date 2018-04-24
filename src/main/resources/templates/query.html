@@ -23,6 +23,7 @@
 
         <label for="endDate">结束日期：</label>
         <input type="text" id="endDate" class="date-picker" readonly="readonly"/>
+        <button id="backBtn" onclick="backToIndex();" class="btn-warning" style="margin-right: 5px;float: right;">返回首页</button>
 
     </div>
 </body>
@@ -32,11 +33,66 @@
 <script th:src="@{/js/toast/jquery.toast.min.js}"></script>
 <script th:src="@{/js/jquery-ui.min.js}"></script>
 <script th:inline="javascript">
-    $("#beginDate").datepicker({
-        dateFormat: "yy-mm-dd"
-    });
-    $("#endDate").datepicker({
-        dateFormat: "yy-mm-dd"
+    var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
+
+    var backToIndex = function() {
+        window.location.href = basePath + '';
+    };
+
+    //分组下拉框
+    var getAllGroup = function () {
+        $.ajax({
+            url:basePath + "/workGroup/findAllList",
+            type:"GET",
+            async:false,
+            success:function (data) {
+                var _html = '';
+                if (data.success) {
+                    _html += '<option value="">全部</option>';
+                    $(data.data).each(function (i, item) {
+                        _html += ('<option value="'+item.id+'">'+item.name+'</option>');
+                    });
+                    $("#groupId").html(_html);
+                }
+            },
+            error:function (data) {
+                console.log(data);
+            }
+        });
+    };
+
+    //机器下拉框
+    var getAllPosition = function () {
+        $.ajax({
+            url:basePath + "/workPosition/findAllList",
+            type:"GET",
+            async:false,
+            success:function (data) {
+                var _html = '';
+                if (data.success) {
+                    _html += '<option value="">全部</option>';
+                    $(data.data).each(function (i, item) {
+                        _html += ('<option value="'+item.id+'">'+item.name+'</option>');
+                    });
+                    $("#positionId").html(_html);
+                }
+            },
+            error:function (data) {
+                console.log(data);
+            }
+        });
+    };
+
+    $(function () {
+        getAllGroup();
+        getAllPosition();
+
+        $("#beginDate").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+        $("#endDate").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
     });
 </script>
 </html>
