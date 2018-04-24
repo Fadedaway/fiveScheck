@@ -110,6 +110,10 @@
         var createDate = $("#dateValue").attr("value");
         var groupId = $("#groupId").val();
 
+        if (groupId === undefined || groupId == null || groupId === '') {
+            return;
+        }
+
         $.ajax({
             /*<![CDATA[*/
             url: basePath + "/problemCollect/initData?createDate="+createDate+"&groupId="+groupId,
