@@ -1,7 +1,11 @@
 package com.magic.jovi.services;
 
+import com.magic.jovi.entities.ProblemCollect;
 import com.magic.jovi.entities.vo.ProblemCollectVO;
+import com.magic.jovi.entities.vo.QueryVO;
+import org.springframework.data.domain.Page;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -22,4 +26,11 @@ public interface ProblemCollectService {
      * @param problemCollectVO 问题集合
      */
     void gatherPoints(ProblemCollectVO problemCollectVO);
+
+    /**
+     * 分页查询问题集合
+     * @param queryVO 查询条件
+     * @return Page
+     */
+    Page<ProblemCollect> queryInfo(QueryVO queryVO) throws ParseException;
 }

@@ -1,6 +1,7 @@
 package com.magic.jovi.controllers;
 
 import com.magic.jovi.entities.vo.ProblemCollectVO;
+import com.magic.jovi.entities.vo.QueryVO;
 import com.magic.jovi.services.ProblemCollectService;
 import com.magic.jovi.utils.ReqResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,21 @@ public class ProblemCollectController {
             //获取前台传入的问题id字符串与分数只和，更新入问题收集表中
             problemCollectService.gatherPoints(problemCollectVO);
             return ReqResult.success("成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ReqResult.failure(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询问题集合
+     * @param queryVO 查询条件
+     * @return ReqResult
+     */
+    @RequestMapping(value = "queryInfo")
+    public ReqResult<?> queryInfo(QueryVO queryVO){
+        try {
+            return ReqResult.success(problemCollectService.queryInfo(queryVO));
         } catch (Exception e) {
             e.printStackTrace();
             return ReqResult.failure(e.getMessage());

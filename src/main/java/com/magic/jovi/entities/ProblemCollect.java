@@ -1,9 +1,6 @@
 package com.magic.jovi.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -23,17 +20,26 @@ public class ProblemCollect extends BaseEntity{
     @Column
     private Long positionId;
 
+    @Transient
+    private String positionName;
+
     /**
      * 工作组Id
      */
     @Column
     private Long groupId;
 
+    @Transient
+    private String groupName;
+
     /**
      * 问题Id 逗号分隔
      */
     @Column
     private String problemId;
+
+    @Transient
+    private String problemName;
 
     /**
      * 减分
@@ -101,5 +107,29 @@ public class ProblemCollect extends BaseEntity{
 
     public void setCheckDateStr(String checkDateStr) {
         this.checkDateStr = checkDateStr;
+    }
+
+    public String getPositionName() {
+        return positionName;
+    }
+
+    public void setPositionName(String positionName) {
+        this.positionName = positionName;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public String getProblemName() {
+        return problemName;
+    }
+
+    public void setProblemName(String problemName) {
+        this.problemName = problemName;
     }
 }

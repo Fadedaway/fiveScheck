@@ -5,26 +5,29 @@ import com.magic.jovi.entities.WorkGroup;
 import com.magic.jovi.entities.WorkPosition;
 import com.magic.jovi.entities.WorkProblem;
 import com.magic.jovi.entities.vo.ProblemCollectVO;
+import com.magic.jovi.entities.vo.QueryVO;
 import com.magic.jovi.repositories.ProblemCollectRepo;
 import com.magic.jovi.repositories.WorkGroupRepo;
 import com.magic.jovi.repositories.WorkPositionRepo;
 import com.magic.jovi.repositories.WorkProblemRepo;
 import com.magic.jovi.services.ProblemCollectService;
+import com.magic.jovi.specification.SimplePageBuilder;
+import com.magic.jovi.specification.SimpleSortBuilder;
 import com.magic.jovi.specification.SimpleSpecificationBuilder;
 import com.magic.jovi.utils.DeleteStatus;
 import com.magic.jovi.utils.OperateSymbol;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -141,4 +144,69 @@ public class ProblemCollectServiceImpl implements ProblemCollectService {
 
         problemCollectRepo.save(problemCollect);
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Page<ProblemCollect> queryInfo(QueryVO queryVO) throws ParseException {
+        if (Objects.isNull(queryVO))
+            throw new RuntimeException("传入数据为空");
+
+        SimpleSpecificationBuilder<ProblemCollect> builder = new SimpleSpecificationBuilder<>("isDeleted",
+                OperateSymbol.E.getSymbol(), DeleteStatus.enable.ordinal());
+
+        if (Objects.nonNull(queryVO.getGroupId()))
+            builder.addAnd("groupId", OperateSymbol.E.getSymbol(), queryVO.getGroupId());
+
+        if (Objects.nonNull(queryVO.getPositionId()))
+            builder.addAnd("positionId", OperateSymbol.E.getSymbol(), queryVO.getPositionId());
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        if (StringUtils.isNotBlank(queryVO.getBeginDate())) {
+            Date beginDate = simpleDateFormat.parse(queryVO.getBeginDate());
+            builder.addAnd("checkDate", OperateSymbol.GE.getSymbol(), beginDate);
+        }
+
+        if (StringUtils.isNotBlank(queryVO.getEndDate())) {
+            Date endDate = simpleDateFormat.parse(queryVO.getEndDate());
+            builder.addAnd("checkDate", OperateSymbol.LE.getSymbol(), endDate);
+        }
+
+        Sort sort = SimpleSortBuilder.generateSort("createTime_d");
+
+        Pageable pageable = SimplePageBuilder.generate(queryVO.getPageNum() - 1, queryVO.getPageSize(), sort);
+        Page<ProblemCollect> collectPage = problemCollectRepo.findAll(builder.generateSpecification(), pageable);
+
+        if (Objects.nonNull(collectPage) && collectPage.getContent().size() > 0) {
+            collectPage.getContent().forEach(problemCollect -> {
+
+                WorkGroup workGroup = workGroupRepo.findOneById(problemCollect.getGroupId());
+                WorkPosition workPosition = workPositionRepo.findOneById(problemCollect.getPositionId());
+
+                problemCollect.setGroupName(workGroup.getName());
+                problemCollect.setPositionName(workPosition.getName());
+
+                if (StringUtils.isNotBlank(problemCollect.getProblemId())) {
+                    final int[] counter = {0};
+                    List problemNameList = Arrays.stream(problemCollect.getProblemId().split(",")).map(problemId -> {
+                        WorkProblem workProblem = workProblemRepo.findOneById(problemId);
+
+                        counter[0] += workProblem.getPoint();
+                        return workProblem.getName();
+                    }).collect(Collectors.toList());
+
+                    String problemNames = StringUtils.join(problemNameList, ",");
+                    problemCollect.setPoint(counter[0]);
+                    problemCollect.setProblemName(problemNames);
+                } else {
+                    problemCollect.setPoint(0);
+                    problemCollect.setProblemName("");
+                }
+            });
+        }
+
+        return collectPage;
+    }
+
+
 }
