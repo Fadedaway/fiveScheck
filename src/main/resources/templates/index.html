@@ -252,19 +252,19 @@
 
         var dateMonth = dateValue.substr(5);
         console.log(dateMonth);
-        var msg =  dateValue;
+        var msg =  eleDate.innerHTML;
 
         if (dateMonth === "04-29") {
 
-           msg = dateValue + ", WOW!杨晓芳的生日!Happy birthday!~";
+           msg = msg + ", WOW!杨晓芳的生日!Happy birthday!~";
 
            alertTool.info("亲爱的，生日快乐！MuMa～");
         } else if (dateMonth === "05-21") {
 
-           msg = dateValue + ", WOW!范一依的生日!Happy birthday!~";
+           msg = msg + ", WOW!范一依的生日!Happy birthday!~";
         } else if (dateMonth === "10-22") {
 
-           msg = dateValue + ", 范佳伟的生日!";
+           msg = msg + ", 范佳伟的生日!";
         }
 
         eleDate.html(msg);
