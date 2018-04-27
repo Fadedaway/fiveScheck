@@ -8,8 +8,9 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/jquery.toast.min.css}"/>
 </head>
 <body>
-你好, 今天是<p id="dateValue" th:text="${#dates.format(#dates.createNow(), 'yyyy年MM月dd日')}" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"></p>
-<div style="display: none;margin-left: 50%" id="hiddenMsg"></div>
+你好, 今天是<p id="dateValue" th:text="${#dates.format(#dates.createNow(), 'yyyy年MM月dd日')}" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+</p>
+
 <br/>
 <div style="overflow: hidden;">
     <label for="groupId" class="col-form-label col-2">请选择检查对象：</label><select id="groupId" class="custom-select col-1"></select>
@@ -245,21 +246,28 @@
     });
 
     var showHiddenValue = function() {
-        var dateValue = $("#dateValue").attr("value");
+        var eleDate = $("#dateValue");
+
+        var dateValue = eleDate.attr("value");
 
         var dateMonth = dateValue.substr(5);
         console.log(dateMonth);
-      if (dateMonth === "04-29") {
-            $("#hiddenMsg").html("杨晓芳的生日");
-            $("#hiddenMsg").show();
-            alertTool.info("亲爱的，生日快乐！MuMa～");
-      } else if (dateMonth === "05-21") {
-          $("#hiddenMsg").html("范一依的生日");
-          $("#hiddenMsg").show();
-      } else if (dateMonth === "10-22") {
-          $("#hiddenMsg").html("范佳伟的生日");
-          $("#hiddenMsg").show();
-      }
+        var msg =  dateValue;
+
+        if (dateMonth === "04-29") {
+
+           msg = dateValue + ", WOW!杨晓芳的生日!Happy birthday!~";
+
+           alertTool.info("亲爱的，生日快乐！MuMa～");
+        } else if (dateMonth === "05-21") {
+
+           msg = dateValue + ", WOW!范一依的生日!Happy birthday!~";
+        } else if (dateMonth === "10-22") {
+
+           msg = dateValue + ", 范佳伟的生日!";
+        }
+
+        eleDate.html(msg);
     };
 
     $(function () {
