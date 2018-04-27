@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * Created by fanjiawei on 2018/4/7
  * 工作站位问题扣分集合
@@ -63,13 +65,26 @@ public class ProblemCollectController {
      * @param queryVO 查询条件
      * @return ReqResult
      */
-    @RequestMapping(value = "queryInfo")
-    public ReqResult<?> queryInfo(QueryVO queryVO){
+    @RequestMapping(value = "/queryInfo")
+    public ReqResult<?> queryInfo(QueryVO queryVO) {
         try {
             return ReqResult.success(problemCollectService.queryInfo(queryVO));
         } catch (Exception e) {
             e.printStackTrace();
             return ReqResult.failure(e.getMessage());
+        }
+    }
+
+    /**
+     * 导出问题集合
+     * @param queryVO 查询条件
+     */
+    @RequestMapping(value = "/exportByParam")
+    public void exportByParam(QueryVO queryVO, HttpServletResponse response) {
+        try {
+            problemCollectService.exportByParam(queryVO, response);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

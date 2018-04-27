@@ -16,6 +16,7 @@ import com.magic.jovi.specification.SimpleSortBuilder;
 import com.magic.jovi.specification.SimpleSpecificationBuilder;
 import com.magic.jovi.utils.DeleteStatus;
 import com.magic.jovi.utils.OperateSymbol;
+import com.magic.jovi.utils.excelUtil.ExcelUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -208,5 +211,77 @@ public class ProblemCollectServiceImpl implements ProblemCollectService {
         return collectPage;
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public void exportByParam(QueryVO queryVO, HttpServletResponse response) throws ParseException, IOException {
+        if (Objects.isNull(queryVO))
+            throw new RuntimeException("传入数据为空");
 
+        SimpleSpecificationBuilder<ProblemCollect> builder = new SimpleSpecificationBuilder<>("isDeleted",
+                OperateSymbol.E.getSymbol(), DeleteStatus.enable.ordinal());
+
+        if (Objects.nonNull(queryVO.getGroupId()))
+            builder.addAnd("groupId", OperateSymbol.E.getSymbol(), queryVO.getGroupId());
+
+        if (Objects.nonNull(queryVO.getPositionId()))
+            builder.addAnd("positionId", OperateSymbol.E.getSymbol(), queryVO.getPositionId());
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        if (StringUtils.isNotBlank(queryVO.getBeginDate())) {
+            Date beginDate = simpleDateFormat.parse(queryVO.getBeginDate());
+            builder.addAnd("checkDate", OperateSymbol.GE.getSymbol(), beginDate);
+        }
+
+        if (StringUtils.isNotBlank(queryVO.getEndDate())) {
+            Date endDate = simpleDateFormat.parse(queryVO.getEndDate());
+            builder.addAnd("checkDate", OperateSymbol.LE.getSymbol(), endDate);
+        }
+
+        Sort sort = SimpleSortBuilder.generateSort("createTime_d");
+
+        List<ProblemCollect> problemCollectList = problemCollectRepo.findAll(builder.generateSpecification(), sort);
+
+        List<Map<String, Object>> dataList = problemCollectList.stream().map(problemCollect -> {
+            WorkGroup workGroup = workGroupRepo.findOneById(problemCollect.getGroupId());
+            WorkPosition workPosition = workPositionRepo.findOneById(problemCollect.getPositionId());
+
+            problemCollect.setGroupName(workGroup.getName());
+            problemCollect.setPositionName(workPosition.getName());
+
+            if (StringUtils.isNotBlank(problemCollect.getProblemId())) {
+                final int[] counter = {0};
+                List problemNameList = Arrays.stream(problemCollect.getProblemId().split(",")).map(problemId -> {
+                    WorkProblem workProblem = workProblemRepo.findOneById(problemId);
+
+                    counter[0] += workProblem.getPoint();
+                    return workProblem.getName();
+                }).collect(Collectors.toList());
+
+                String problemNames = StringUtils.join(problemNameList, ",");
+                problemCollect.setPoint(counter[0]);
+                problemCollect.setProblemName(problemNames);
+            } else {
+                problemCollect.setPoint(0);
+                problemCollect.setProblemName("");
+            }
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("checkDateStr", problemCollect.getCheckDateStr());
+            data.put("groupName", problemCollect.getGroupName());
+            data.put("positionName", problemCollect.getPositionName());
+            data.put("problemName", problemCollect.getProblemName());
+            data.put("point", problemCollect.getPoint());
+            return data;
+        }).collect(Collectors.toList());
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("checkDateStr", "日期");
+        headers.put("groupName", "小组");
+        headers.put("positionName", "机器");
+        headers.put("problemName", "问题");
+        headers.put("point", "扣分");
+
+        ExcelUtil.exportExcel(headers, dataList, response.getOutputStream());
+    }
 }

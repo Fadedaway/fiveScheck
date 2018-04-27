@@ -5,6 +5,8 @@ import com.magic.jovi.entities.vo.ProblemCollectVO;
 import com.magic.jovi.entities.vo.QueryVO;
 import org.springframework.data.domain.Page;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -33,4 +35,10 @@ public interface ProblemCollectService {
      * @return Page
      */
     Page<ProblemCollect> queryInfo(QueryVO queryVO) throws ParseException;
+
+    /**
+     * 导出问题集合
+     * @param queryVO 查询条件
+     */
+    void exportByParam(QueryVO queryVO, HttpServletResponse response) throws ParseException, IOException;
 }
