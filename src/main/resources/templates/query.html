@@ -7,6 +7,11 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/jquery.toast.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/jquery-ui.min.css}"/>
+    <style>
+        .M-box2{
+            position:fixed;margin-left:50%;
+        }
+    </style>
 </head>
 <body>
 <!-- 这是一个查询页面，选择日期/分组查询当天的数据 -->
@@ -23,15 +28,35 @@
 
         <label for="endDate">结束日期：</label>
         <input type="text" id="endDate" class="date-picker" readonly="readonly"/>
+        <button id="query" class="btn-info" onclick="queryCollect(1,10);">查询</button>
+        <button id="export" class="btn-info" onclick="exportExcel();">导出</button>
         <button id="backBtn" onclick="backToIndex();" class="btn-warning" style="margin-right: 5px;float: right;">返回首页</button>
 
     </div>
+    <div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th width="5%">序号</th>
+                <th width="10%">日期</th>
+                <th width="10%">小组</th>
+                <th width="10%">机器</th>
+                <th width="*%">问题</th>
+                <th width="8%">扣分</th>
+            </tr>
+            </thead>
+            <tbody id="collectData">
+            </tbody>
+        </table>
+    </div>
+    <div class="M-box2"></div>
 </body>
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script th:src="@{/js/toast/alertTool.js}"></script>
 <script th:src="@{/js/toast/jquery.toast.min.js}"></script>
 <script th:src="@{/js/jquery-ui.min.js}"></script>
+<script th:src="@{/js/jquery.pagination.js}"></script>
 <script th:inline="javascript">
     var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
 
@@ -83,6 +108,68 @@
         });
     };
 
+    var queryCollect = function(pageNum, pageSize) {
+      $.ajax({
+         url: basePath + "/problemCollect/queryInfo",
+         type: "GET",
+         data: {
+             groupId:$("#groupId").val(),
+             positionId:$("#positionId").val(),
+             beginDate:$("#beginDate").val(),
+             endDate:$("#endDate").val(),
+             pageNum:pageNum,
+             pageSize:pageSize
+         },
+         success:function (data) {
+             if (data.success) {
+
+                 $('.M-box2').pagination({
+                     pageCount:data.data.totalPages,
+                     current:data.data.number + 1,
+                     coping: true,
+                     homePage: '首页',
+                     endPage: '末页',
+                     prevContent: '上页',
+                     nextContent: '下页',
+                     callback: function (api) {
+                         queryCollect(api.getCurrent(), 10);
+                     }
+                 });
+                 installData(data.data.content);
+             }
+             console.log(data);
+         }
+      });
+    };
+
+    var installData = function(data) {
+        var _tBody = $("#collectData");
+
+        if (data === undefined || null == data || data.length === 0) {
+            _tBody.html('<tr><td colspan="6" align="center">没有查询到数据</td></tr>');
+            return;
+        }
+
+        var _html = '';
+
+        $(data).each(function (i, item) {
+            _html += '<tr><td>'+(i+1)+'</td><td>'+item.checkDateStr+'</td><td>'+item.groupName+'</td>' +
+                '<td>'+item.positionName+'</td><td>'+item.problemName+'</td><td>'+item.point+'</td></tr>';
+        });
+
+        _tBody.html(_html);
+    };
+
+    var exportExcel = function() {
+        var groupId = $("#groupId").val();
+        var positionId = $("#positionId").val();
+        var beginDate = $("#beginDate").val();
+        var endDate = $("#endDate").val();
+        /*<![CDATA[*/
+        window.location.href = basePath + "/problemCollect/exportByParam?groupId="+groupId+"&positionId="+positionId+"&beginDate="+beginDate+"&endDate="+endDate;
+        /*]]>*/
+    };
+
     $(function () {
         getAllGroup();
         getAllPosition();
@@ -93,6 +180,8 @@
         $("#endDate").datepicker({
             dateFormat: "yy-mm-dd"
         });
+
+        queryCollect(1, 10);
     });
 </script>
 </html>
