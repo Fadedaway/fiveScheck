@@ -282,6 +282,9 @@ public class ProblemCollectServiceImpl implements ProblemCollectService {
         headers.put("problemName", "问题");
         headers.put("point", "扣分");
 
+        response.setHeader("Content-Type","application/force-download");
+        response.setHeader("Content-Type","application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "attachment; filename=" + new Date().getTime()+".xls");
         ExcelUtil.exportExcel(headers, dataList, response.getOutputStream());
     }
 }
