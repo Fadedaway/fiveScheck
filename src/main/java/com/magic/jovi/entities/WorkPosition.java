@@ -19,11 +19,25 @@ public class WorkPosition extends BaseEntity {
     @Column
     private String name;
 
+    /**
+     * 工作组主键
+     */
+    @Column
+    private Long groupId;
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 }
