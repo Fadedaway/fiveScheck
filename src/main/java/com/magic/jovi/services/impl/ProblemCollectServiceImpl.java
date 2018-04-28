@@ -107,7 +107,8 @@ public class ProblemCollectServiceImpl implements ProblemCollectService {
             }).collect(Collectors.toList());
         }
 
-        List<WorkPosition> workPositions = workPositionRepo.findAllByIsDeleted(DeleteStatus.enable.ordinal());
+        //List<WorkPosition> workPositions = workPositionRepo.findAllByIsDeleted(DeleteStatus.enable.ordinal());
+        List<WorkPosition> workPositions = workPositionRepo.findAllByGroupIdAndIsDeleted(groupId, DeleteStatus.enable.ordinal());
 
 
         Date finalCheckDate = checkDate;

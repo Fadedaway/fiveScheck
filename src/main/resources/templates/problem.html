@@ -105,7 +105,7 @@
                 maxlength: 100
             }
         },
-        message: {
+        messages: {
             name: {
                 required: "此项必填",
                 maxlength: "超出最大长度限制"
@@ -130,7 +130,7 @@
                 if (data.success) {
                     installData(data.data);
                 } else {
-                    alert(data.data);
+                    alertTool.error(data.data);
                 }
             },
             error: function (data) {
@@ -199,6 +199,7 @@
     };
 
     $("#problemAdd").on('click', function () {
+        clearForm(problemForm);
         $("#myModal").modal("toggle");
     });
 
@@ -230,7 +231,7 @@
                 if (data.success){
                     //启用保存按钮
                     $("#modalSaveBtn").removeAttr("disabled");
-                    clearForm(problemForm);
+                    //clearForm(problemForm);
                     $('#myModal').modal('hide');
                     initData();
                     alertTool.info("保存成功");

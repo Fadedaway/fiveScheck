@@ -32,10 +32,11 @@ public interface WorkPositionService {
 
     /**
      * 查询所有工作站位
+     * @param groupId 所属小组
      * @param pageVO 分页数据
      * @return Page
      */
-    Page<WorkPosition> findAll(PageVO pageVO);
+    Page<WorkPosition> findAll(Long groupId ,PageVO pageVO);
 
     /**
      * 查询所有的工作站位

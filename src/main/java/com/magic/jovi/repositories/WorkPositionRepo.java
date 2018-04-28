@@ -12,4 +12,6 @@ import java.util.List;
 public interface WorkPositionRepo extends BaseJpaRepository<WorkPosition, Serializable>, JpaSpecificationExecutor<WorkPosition> {
 
     List<WorkPosition> findAllByIsDeleted(int ordinal);
+
+    List<WorkPosition> findAllByGroupIdAndIsDeleted(Long groupId, int ordinal);
 }

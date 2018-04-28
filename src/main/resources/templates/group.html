@@ -77,7 +77,7 @@
                 maxlength: 20
             }
         },
-        message: {
+        messages: {
             name: {
                 required: "此项必填",
                 maxlength: "超出最大长度限制"
@@ -94,7 +94,7 @@
                if (data.success) {
                    installData(data.data);
                } else {
-                   alert(data.data);
+                   alertTool.error(data.data);
                }
            },
            error: function (data) {
@@ -161,6 +161,7 @@
     };
 
     $("#groupAdd").on('click', function () {
+        clearForm(groupForm);
         $("#myModal").modal("toggle");
     });
 
@@ -192,7 +193,7 @@
                 if (data.success){
                     //启用保存按钮
                     $("#modalSaveBtn").removeAttr("disabled");
-                    clearForm(groupForm);
+                    //clearForm(groupForm);
                     $('#myModal').modal('hide');
                     initData();
                     alertTool.info("保存成功");

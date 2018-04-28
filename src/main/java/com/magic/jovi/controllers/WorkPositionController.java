@@ -87,14 +87,15 @@ public class WorkPositionController {
 
     /**
      * 查询所有的工作站位
-     * @param page 当前页
+     * @param groupId 所属小组
+     * @param pageNum 当前页
      * @return ReqResult
      */
     @RequestMapping(value = "/findAll")
-    public ReqResult<?> findAll(@RequestParam int page) {
+    public ReqResult<?> findAll(Long groupId, int pageNum) {
         try {
-            PageVO pageVO = new PageVO(page);
-            return ReqResult.success(workPositionService.findAll(pageVO), pageVO);
+            PageVO pageVO = new PageVO(pageNum);
+            return ReqResult.success(workPositionService.findAll(groupId, pageVO), pageVO);
         } catch (Exception e) {
             e.printStackTrace();
             return ReqResult.failure("查询失败：" + e.getMessage());

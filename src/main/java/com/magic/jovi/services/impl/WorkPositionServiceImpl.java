@@ -1,8 +1,10 @@
 package com.magic.jovi.services.impl;
 
+import com.magic.jovi.entities.WorkGroup;
 import com.magic.jovi.entities.WorkPosition;
 import com.magic.jovi.entities.vo.PageVO;
 import com.magic.jovi.entities.vo.WorkPositionVO;
+import com.magic.jovi.repositories.WorkGroupRepo;
 import com.magic.jovi.repositories.WorkPositionRepo;
 import com.magic.jovi.services.WorkPositionService;
 import com.magic.jovi.specification.SimplePageBuilder;
@@ -30,9 +32,12 @@ public class WorkPositionServiceImpl implements WorkPositionService {
 
     private WorkPositionRepo workPositionRepo;
 
+    private WorkGroupRepo workGroupRepo;
+
     @Autowired
-    public WorkPositionServiceImpl(WorkPositionRepo workPositionRepo) {
+    public WorkPositionServiceImpl(WorkPositionRepo workPositionRepo, WorkGroupRepo workGroupRepo) {
         this.workPositionRepo = workPositionRepo;
+        this.workGroupRepo = workGroupRepo;
     }
 
     @Override
@@ -56,6 +61,9 @@ public class WorkPositionServiceImpl implements WorkPositionService {
 
             if (StringUtils.isNotBlank(workPositionVO.getName()))
                 workPosition.setName(workPositionVO.getName());
+
+            if (Objects.nonNull(workPositionVO.getGroupId()) && workPositionVO.getGroupId() != 0)
+                workPosition.setGroupId(workPositionVO.getGroupId());
 
             workPositionRepo.save(workPosition);
 
@@ -85,10 +93,25 @@ public class WorkPositionServiceImpl implements WorkPositionService {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Page<WorkPosition> findAll(PageVO pageVO) {
-        return workPositionRepo.findAll(new SimpleSpecificationBuilder<WorkPosition>("isDeleted",
-                OperateSymbol.E.getSymbol(), DeleteStatus.enable.ordinal()).generateSpecification(),
-                SimplePageBuilder.generate(pageVO.getPage(), SimpleSortBuilder.generateSort("createTime_d")));
+    public Page<WorkPosition> findAll(Long groupId ,PageVO pageVO) {
+        SimpleSpecificationBuilder<WorkPosition> builder = new SimpleSpecificationBuilder<>("isDeleted",
+                OperateSymbol.E.getSymbol(), DeleteStatus.enable.ordinal());
+
+        if (Objects.nonNull(groupId) && groupId != 0)
+            builder.addAnd("groupId", OperateSymbol.E.getSymbol(), groupId);
+
+
+        Page<WorkPosition> page = workPositionRepo.findAll(builder.generateSpecification(),
+                SimplePageBuilder.generate(pageVO.getPage() - 1, SimpleSortBuilder.generateSort("createTime_d")));
+
+        if (Objects.nonNull(page) && Objects.nonNull(page.getContent()) && page.getContent().size() > 0) {
+            page.getContent().forEach(workPosition -> {
+                WorkGroup workGroup = workGroupRepo.findOneById(workPosition.getGroupId());
+
+                workPosition.setGroupName(workGroup.getName());
+            });
+        }
+        return page;
     }
 
     @Override
@@ -98,6 +121,14 @@ public class WorkPositionServiceImpl implements WorkPositionService {
 
     @Override
     public WorkPosition detail(Long id) {
-        return workPositionRepo.findOneById(id);
+        WorkPosition workPosition = workPositionRepo.findOneById(id);
+
+        if (Objects.nonNull(workPosition)) {
+            WorkGroup workGroup = workGroupRepo.findOneById(workPosition.getGroupId());
+
+            workPosition.setGroupName(workGroup.getName());
+        }
+
+        return workPosition;
     }
 }
