@@ -24,7 +24,7 @@
         <label for="positionId" class="col-form-label">机器：</label><select id="positionId" class="custom-select-sm"></select>
 
         <label for="beginDate">开始日期：</label>
-        <input type="text" id="beginDate" class="date-picker" readonly="readonly"/>
+        <input type="text" id="beginDate" class="date-picker" readonly="readonly" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"/>
 
         <label for="endDate">结束日期：</label>
         <input type="text" id="endDate" class="date-picker" readonly="readonly"/>
