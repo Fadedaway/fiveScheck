@@ -91,12 +91,10 @@
             success:function (data) {
                 var _html = '';
                 if (data.success) {
-                    $(data.data).each(function (i, item) {
+                    _html = '<option value="" selected="selected">请选择</option>';
 
-                        if (i === 0)
-                            _html += ('<option value="'+item.id+'" selected="selected">'+item.name+'</option>');
-                        else
-                            _html += ('<option value="'+item.id+'">'+item.name+'</option>');
+                    $(data.data).each(function (i, item) {
+                        _html += ('<option value="'+item.id+'">'+item.name+'</option>');
                     });
                     $("#groupId").html(_html);
                 }
