@@ -20,7 +20,7 @@
     <br/>
     <div style="overflow: hidden;">
 
-        <label for="groupId" class="col-form-label">小组：</label><select id="groupId" class="custom-select-sm"></select>
+        <label for="groupId" class="col-form-label">小组：</label><select id="groupId" class="custom-select-sm" onchange="getAllPosition();"></select>
         <label for="positionId" class="col-form-label">机器：</label><select id="positionId" class="custom-select-sm"></select>
 
         <label for="beginDate">开始日期：</label>
@@ -88,10 +88,15 @@
 
     //机器下拉框
     var getAllPosition = function () {
+        var groupId = $("#groupId").val();
+
         $.ajax({
             url:basePath + "/workPosition/findAllList",
             type:"GET",
             async:false,
+            data:{
+              groupId:groupId
+            },
             success:function (data) {
                 var _html = '';
                 if (data.success) {

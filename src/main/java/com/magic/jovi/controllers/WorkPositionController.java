@@ -107,7 +107,7 @@ public class WorkPositionController {
      * @return List
      */
     @RequestMapping(value = "/findAllList")
-    public ReqResult<?> findAllList() {
-        return ReqResult.success(workPositionService.findAllList());
+    public ReqResult<?> findAllList(Long groupId) {
+        return ReqResult.success(workPositionService.findAllList(groupId));
     }
 }

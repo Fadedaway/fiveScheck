@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -115,8 +116,11 @@ public class WorkPositionServiceImpl implements WorkPositionService {
     }
 
     @Override
-    public List<WorkPosition> findAllList() {
-        return workPositionRepo.findAllByIsDeleted(DeleteStatus.enable.ordinal());
+    public List<WorkPosition> findAllList(Long groupId) {
+        if (Objects.isNull(groupId) || groupId == 0)
+            return new ArrayList<>();
+
+        return workPositionRepo.findAllByGroupIdAndIsDeleted(groupId, DeleteStatus.enable.ordinal());
     }
 
     @Override

@@ -40,9 +40,10 @@ public interface WorkPositionService {
 
     /**
      * 查询所有的工作站位
+     * @param groupId 所属小组
      * @return List
      */
-    List<WorkPosition> findAllList();
+    List<WorkPosition> findAllList(Long groupId);
 
     /**
      * 查询工作站位
