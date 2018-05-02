@@ -91,8 +91,12 @@ public class ProblemCollectServiceImpl implements ProblemCollectService {
                     List problemNameList = Arrays.stream(problemCollect.getProblemId().split(",")).map(problemId -> {
                         WorkProblem workProblem = workProblemRepo.findOneById(problemId);
 
-                        counter[0] += workProblem.getPoint();
-                        return workProblem.getName();
+                        if (Objects.nonNull(workProblem)) {
+                            counter[0] += workProblem.getPoint();
+                            return workProblem.getName();
+                        } else {
+                            return "";
+                        }
                     }).collect(Collectors.toList());
 
                     String problemNames = StringUtils.join(problemNameList, ",");
