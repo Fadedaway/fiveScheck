@@ -1,10 +1,12 @@
 package com.magic.jovi.services.impl;
 
 import com.magic.jovi.entities.WorkGroup;
+import com.magic.jovi.entities.WorkPosition;
 import com.magic.jovi.entities.vo.PageVO;
 import com.magic.jovi.entities.vo.WorkGroupVO;
 import com.magic.jovi.repositories.WorkGroupRepo;
 import com.magic.jovi.services.WorkGroupService;
+import com.magic.jovi.services.WorkPositionService;
 import com.magic.jovi.specification.SimplePageBuilder;
 import com.magic.jovi.specification.SimpleSortBuilder;
 import com.magic.jovi.specification.SimpleSpecificationBuilder;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Created by fanjiawei on 2018/3/31
@@ -30,9 +33,12 @@ public class WorkGroupServiceImpl implements WorkGroupService {
 
     private final WorkGroupRepo workGroupRepo;
 
+    private WorkPositionService workPositionService;
+
     @Autowired
-    public WorkGroupServiceImpl(WorkGroupRepo workGroupRepo) {
+    public WorkGroupServiceImpl(WorkGroupRepo workGroupRepo, WorkPositionService workPositionService) {
         this.workGroupRepo = workGroupRepo;
+        this.workPositionService = workPositionService;
     }
 
     @Override
@@ -77,6 +83,13 @@ public class WorkGroupServiceImpl implements WorkGroupService {
                 WorkGroup workGroup = workGroupRepo.findOneById(Long.valueOf(id));
 
                 if (Objects.nonNull(workGroup)) {
+
+                    //同步删除，小组对应的工位
+                    List<Long> positionIdList = workPositionService.findAllList(workGroup.getId()).stream().map(WorkPosition::getId).collect(Collectors.toList());
+
+                    if (Objects.nonNull(positionIdList))
+                        workPositionService.delete(StringUtils.join(positionIdList, ","));
+
                     workGroupRepo.logicalDelete(Long.valueOf(id));
                 }
             }

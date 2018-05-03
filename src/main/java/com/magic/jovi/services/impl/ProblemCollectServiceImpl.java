@@ -191,8 +191,8 @@ public class ProblemCollectServiceImpl implements ProblemCollectService {
                 WorkGroup workGroup = workGroupRepo.findOneById(problemCollect.getGroupId());
                 WorkPosition workPosition = workPositionRepo.findOneById(problemCollect.getPositionId());
 
-                problemCollect.setGroupName(workGroup.getName());
-                problemCollect.setPositionName(workPosition.getName());
+                problemCollect.setGroupName(Objects.nonNull(workGroup)?workGroup.getName():"");
+                problemCollect.setPositionName(Objects.nonNull(workPosition)?workPosition.getName():"");
 
                 if (StringUtils.isNotBlank(problemCollect.getProblemId())) {
                     final int[] counter = {0};
@@ -255,8 +255,8 @@ public class ProblemCollectServiceImpl implements ProblemCollectService {
             WorkGroup workGroup = workGroupRepo.findOneById(problemCollect.getGroupId());
             WorkPosition workPosition = workPositionRepo.findOneById(problemCollect.getPositionId());
 
-            problemCollect.setGroupName(workGroup.getName());
-            problemCollect.setPositionName(workPosition.getName());
+            problemCollect.setGroupName(Objects.nonNull(workGroup)?workGroup.getName():"");
+            problemCollect.setPositionName(Objects.nonNull(workPosition)?workPosition.getName():"");
 
             if (StringUtils.isNotBlank(problemCollect.getProblemId())) {
                 final int[] counter = {0};
@@ -291,7 +291,7 @@ public class ProblemCollectServiceImpl implements ProblemCollectService {
         Map<String, String> headers = new HashMap<>();
         headers.put("checkDateStr", "日期");
         headers.put("groupName", "小组");
-        headers.put("positionName", "机器");
+        headers.put("positionName", "工位");
         headers.put("problemName", "问题");
         headers.put("point", "扣分");
 
